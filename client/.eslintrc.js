@@ -32,13 +32,14 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'prettier/prettier': 'error',
     'react/function-component-definition': 'off',
-    'react/jsx-filename-extension': [{ extensions: ['.tsx'] }],
+    'react/jsx-filename-extension': ['warn', { extensions: ['.tsx'] }],
+    'react/jsx-props-no-spreading': 'off',
     'react/react-in-jsx-scope': 'off',
   },
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
       },
     },
   },
