@@ -11,12 +11,20 @@ const Home: NextPage = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const { mutate, data } = useMintTimeCapsule();
+  const { mutate, data, isLoading } = useMintTimeCapsule();
 
   const onSubmit: SubmitHandler<Inputs> = data => mutate(data);
 
   if (data) {
-    return <div>Success! Your address is {data.nftAddress}</div>;
+    return (
+      <div className={styles['card']}>
+        Success! Your address is {data.nftAddress}
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return <div className={styles['card']}>Minting...</div>;
   }
 
   return (
@@ -27,25 +35,36 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <input
-            placeholder="0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
-            {...register('maticAddress', { required: true })}
-          />
-          {errors.maticAddress && <span>This field is required</span>}
+      <div className={styles['card']}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles['mint-form']}>
+          <div>
+            <label htmlFor="maticAddress">Polygon Address* </label>
+            <input
+              id="maticAddress"
+              placeholder="0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+              {...register('maticAddress', { required: true })}
+            />
+            {errors.maticAddress && <span>This field is required</span>}
+          </div>
 
-          <input
-            placeholder="@elon_musk"
-            {...register('twitterHandle', { required: true })}
-          />
-          {errors.twitterHandle && <span>This field is required</span>}
+          <div>
+            <label htmlFor="twitterHandle">Twitter Handle </label>
+            <input
+              id="twitterHandle"
+              placeholder="@elon_musk"
+              {...register('twitterHandle')}
+            />
+          </div>
 
-          <input
-            placeholder="In 2023..."
-            {...register('prediction', { required: true })}
-          />
-          {errors.prediction && <span>This field is required</span>}
+          <div>
+            <label htmlFor="prediction">Your 2023 DeFi Prediction* </label>
+            <textarea
+              id="prediction"
+              placeholder="In 2023..."
+              {...register('prediction', { required: true })}
+            />
+            {errors.prediction && <span>This field is required</span>}
+          </div>
 
           <button type="submit">Mint NFT</button>
         </form>
