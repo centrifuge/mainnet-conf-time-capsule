@@ -7,6 +7,7 @@ type Data =
     }
   | Error;
 
+// eslint-disable-next-line no-unused-vars
 async function handleMint() {
   const { INFURA_RPC_URL, HOT_WALLET_PRIVATE_KEY } = process.env;
 
@@ -30,8 +31,8 @@ export default async function handler(
   res: NextApiResponse<Data>,
 ) {
   try {
-    const result = await handleMint();
-    console.log(result);
+    // const result = await handleMint();
+    // console.log(result);
 
     // eslint-disable-next-line no-promise-executor-return
     await new Promise(resolve => setTimeout(resolve, 2000));
