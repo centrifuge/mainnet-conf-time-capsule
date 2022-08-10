@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { Inputs } from '../types';
 
 const useMintTimeCapsule = () => {
   const query = useMutation(async (payload: Inputs) => {
