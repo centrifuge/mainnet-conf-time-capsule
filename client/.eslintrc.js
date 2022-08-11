@@ -19,6 +19,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'eslint-plugin-prettier'],
   rules: {
+    'arrow-body-style': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',

@@ -5,7 +5,8 @@ type Data =
   | {
       nftAddress: string;
     }
-  | Error;
+  | Error
+  | string;
 
 // eslint-disable-next-line no-unused-vars
 async function handleMint() {
@@ -30,12 +31,19 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
+  const { method } = req;
+
+  if (method !== 'POST') {
+    res.status(405).send('Method not allowed. Use POST.');
+  }
+
   try {
     // const result = await handleMint();
     // console.log(result);
 
-    // eslint-disable-next-line no-promise-executor-return
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => {
+      setTimeout(resolve, 2000);
+    });
     res.status(200).json({ nftAddress: '0x' });
   } catch (error) {
     res.status(500).json(new Error('Internal server error'));

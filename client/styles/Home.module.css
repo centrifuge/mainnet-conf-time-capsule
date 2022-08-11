@@ -15,3 +15,7 @@
   row-gap: 10px;
   width: 100%;
 }
+
+.captcha {
+  visibility: hidden;
+}
