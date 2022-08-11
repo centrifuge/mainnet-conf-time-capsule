@@ -12,6 +12,7 @@ export const MintForm = () => {
     formState: { errors },
   } = useForm<Inputs>({
     resolver: yupResolver(validationSchema),
+    reValidateMode: 'onSubmit',
   });
 
   const { mutate, data, isLoading } = useMintTimeCapsule();
@@ -53,6 +54,7 @@ export const MintForm = () => {
             {...register('twitterHandle')}
           />
         </label>
+        {errors.twitterHandle && <span>{errors.twitterHandle.message}</span>}
       </div>
 
       <div>

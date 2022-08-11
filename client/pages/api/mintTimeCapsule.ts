@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import ethers from 'ethers';
+import axios from 'axios';
 
 type Data =
   | {
@@ -31,20 +32,38 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  const { method } = req;
+  const { body, method } = req;
 
   if (method !== 'POST') {
     res.status(405).send('Method not allowed. Use POST.');
   }
 
-  try {
-    // const result = await handleMint();
-    // console.log(result);
+  const { twitterHandle } = body;
 
-    await new Promise(resolve => {
-      setTimeout(resolve, 2000);
-    });
-    res.status(200).json({ nftAddress: '0x' });
+  try {
+    if (twitterHandle && /^@?(\w){1,15}$/.test(twitterHandle)) {
+      const { data } = await axios.get(
+        `https://api.twitter.com/2/users/by?user.fields=profile_image_url&usernames=${twitterHandle.replace(
+          '@',
+          '',
+        )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.TWITTER_BEARER_TOKEN}`,
+          },
+        },
+      );
+
+      const profileImageUrl = data?.data[0]?.profile_image_url;
+
+      console.log(profileImageUrl);
+      // const result = await handleMint();
+      // console.log(result);
+      await new Promise(resolve => {
+        setTimeout(resolve, 2000);
+      });
+      res.status(200).json({ nftAddress: '0x' });
+    }
   } catch (error) {
     res.status(500).json(new Error('Internal server error'));
   }

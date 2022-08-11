@@ -24,6 +24,7 @@
    ```sh
    INFURA_RPC_URL==<infura-rpc-url>
    HOT_WALLET_PRIVATE_KEY=<private-key>
+   TWITTER_BEARER_TOKEN=<twitter-bearer-token>
    ```
 
 4. Run a local development environment
@@ -34,6 +35,7 @@
 
 #### API Spec
 
-| Type   | Endpoint               | Body                                                                      | Response                       |
-| ------ | ---------------------- | ------------------------------------------------------------------------- | ------------------------------ |
-| `POST` | `/api/mintTimeCapsule` | `{twitterHandle: string; polygonAddress: string; defiPrediction: string;` | `{ timeCapsuleAddess: string;` |
+| Type   | Endpoint                                             | Body                                                                         | Response                         |
+| ------ | ---------------------------------------------------- | ---------------------------------------------------------------------------- | -------------------------------- |
+| `POST` | `/api/mintTimeCapsule`                               | `{ twitterHandle: string; polygonAddress: string; defiPrediction: string; }` | `{ timeCapsuleAddess: string; }` |
+| `GET`  | `/api/getTwitterUser?twitterHandle=<twitter-handle>` | --                                                                           | `{ isValidUser: boolean; }`      |
