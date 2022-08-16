@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Inputs } from '../types';
 
 const useMintTimeCapsule = () => {
-  const query = useMutation(async (payload: Inputs) => {
+  const query = useMutation(async (payload: Partial<Inputs>) => {
     const { data } = await axios.post('/api/mintTimeCapsule', payload);
 
     return data;

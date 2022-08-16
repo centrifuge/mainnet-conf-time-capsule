@@ -20,6 +20,7 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'eslint-plugin-prettier'],
   rules: {
     'arrow-body-style': 'off',
+    'func-names': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
@@ -31,6 +32,12 @@ module.exports = {
       },
     ],
     'import/prefer-default-export': 'off',
+    'jsx-a11y/label-has-associated-control': [
+      2,
+      {
+        labelAttributes: ['label'],
+      },
+    ],
     'prettier/prettier': 'error',
     'react/function-component-definition': 'off',
     'react/jsx-filename-extension': ['warn', { extensions: ['.tsx'] }],
