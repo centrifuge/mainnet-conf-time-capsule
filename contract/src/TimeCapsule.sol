@@ -10,12 +10,9 @@ contract TimeCapsule is Ownable, ERC721Enumerable {
     }
 
     mapping(uint => address) ownership;
-    mapping(uint => string) messages;
 
-    function mint(address to, string calldata message) public payable {
+    function mint(address to) public payable {
         uint256 id = totalSupply();
-        messages[id] = message;
-
         _safeMint(to, id);
     }
 

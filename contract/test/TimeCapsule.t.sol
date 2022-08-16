@@ -15,34 +15,34 @@ contract TimeCapsuleTest is Test {
     function testMintSuccess(address addr) public {
         vm.assume(addr != address(0));
         vm.assume(addr.code.length <= 0);
-        timeCap.mint(addr, "hello world");
+        timeCap.mint(addr);
         assertEq(timeCap.ownerOf(0), addr);
     }
 
     function testMintTwiceSuccess(address addr) public {
         vm.assume(addr != address(0));
         vm.assume(addr.code.length <= 0);
-        timeCap.mint(addr, "hello world");
-        timeCap.mint(addr, "ok ok ok ok ok");
+        timeCap.mint(addr);
+        timeCap.mint(addr);
         assertEq(timeCap.ownerOf(0), addr);
         assertEq(timeCap.ownerOf(1), addr);
     }
 
 
     function testFailMintToZero() public {
-        timeCap.mint(address(0), "hello world");
+        timeCap.mint(address(0));
         assertEq(timeCap.ownerOf(0), address(0));
     }
 
     function testFailMintToContract() public {
-        timeCap.mint(address(this), "hello world");
+        timeCap.mint(address(this));
         assertEq(timeCap.ownerOf(0), address(this));
     }
 
     function testBurn(address addr) public {
         vm.assume(addr != address(0));
         vm.assume(addr.code.length <= 0);
-        timeCap.mint(addr, "hello world");
+        timeCap.mint(addr);
         assertEq(timeCap.ownerOf(0), addr);
         timeCap.burn(0);
         vm.expectRevert("ERC721: invalid token ID");
@@ -51,11 +51,12 @@ contract TimeCapsuleTest is Test {
 
     function testBurnUnauthorized(address addr1, address addr2) public {
         vm.assume(addr1 != address(0));
+        vm.assume(addr2 != address(0));
         vm.assume(addr1.code.length <= 0);
-        timeCap.mint(addr1, "hello world");
+        timeCap.mint(addr1);
         assertEq(timeCap.ownerOf(0), addr1);
-        vm.prank(addr2);
         vm.expectRevert("Ownable: caller is not the owner");
+        vm.prank(addr2);
         timeCap.burn(0);
     }
 }
