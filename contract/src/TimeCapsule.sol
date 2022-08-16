@@ -9,7 +9,7 @@ contract TimeCapsule is Ownable, ERC721Enumerable {
     constructor(string memory name_, string memory symbol_) ERC721(name_, symbol_) public {
     }
 
-    mapping(uint => address) ownership;
+    string private _baseTokenURI;
 
     function mint(address to) public payable {
         uint256 id = totalSupply();
@@ -18,5 +18,17 @@ contract TimeCapsule is Ownable, ERC721Enumerable {
 
     function burn(uint256 id) onlyOwner public {
         _burn(id);
+    }
+
+    function setBaseURI(string memory baseURI) public onlyOwner {
+        _baseTokenURI = baseURI;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return _baseTokenURI;
+    }
+
+    function baseURI() public view returns (string memory) {
+        return _baseTokenURI;
     }
 }

@@ -52,11 +52,26 @@ contract TimeCapsuleTest is Test {
     function testBurnUnauthorized(address addr1, address addr2) public {
         vm.assume(addr1 != address(0));
         vm.assume(addr2 != address(0));
+        vm.assume(addr2 != address(this));
         vm.assume(addr1.code.length <= 0);
         timeCap.mint(addr1);
         assertEq(timeCap.ownerOf(0), addr1);
         vm.expectRevert("Ownable: caller is not the owner");
         vm.prank(addr2);
         timeCap.burn(0);
+    }
+
+    function testSetBaseURI(string memory baseURI) public {
+        timeCap.setBaseURI(baseURI);
+        assertEq(baseURI, timeCap.baseURI());
+    }
+
+    function testSetBaseURIUnauthorized(string memory baseURI, address addr1) public {
+        vm.assume(addr1 != address(0));
+        vm.assume(addr1 != address(this));
+        vm.expectRevert("Ownable: caller is not the owner");
+        vm.prank(addr1);
+        timeCap.setBaseURI(baseURI);
+
     }
 }
