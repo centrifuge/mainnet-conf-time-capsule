@@ -40,22 +40,26 @@ export default function SVGGenerator({
         .card {
             flex: 0 0 auto;
             display: flex;
-            padding: 10px 20px;
+            padding: 10%;
             flex-direction: column;
             font-family: roboto;
             color: black;
             background-color: white;
-            border-radius: 25px;
-            border: 2px solid black;
-            cursor: pointer;
+            border-radius: 4px;
+            cursor: default;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 5%), rgb(0 0 0 / 5%) 0px 20px 25px -5px, rgb(0 0 0 / 4%) 0px 10px 10px -5px;
         }
         .title {
             flex: 1 1 auto;
-            font-size: 21px;
+            font-size: 200%;
             text-align: center;
+            margin-bottom: 10%;
         }
         .main-content {
             flex: 1 1 auto;
+            font-size: 100%;
         }
         textArea {
             width: 100%;
@@ -68,6 +72,8 @@ export default function SVGGenerator({
             text-align: right;
         }
         .footer {
+            margin-top: 10%;
+            font-size: 90%;
             flex: 1 1 auto;
             text-align: center;
         }

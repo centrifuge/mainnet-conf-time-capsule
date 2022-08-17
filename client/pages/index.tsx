@@ -32,8 +32,8 @@ const Home: NextPage = () => {
         <SVGGenerator
           prediction="Real world assets will make up 50% of defi TVL"
           twitterName="@Lucasvo"
-          width={300}
-          height={300}
+          width={400}
+          height={400}
         />
       </Container>
     </Container>
