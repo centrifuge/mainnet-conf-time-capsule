@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { Card, Container } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { MintForm } from '../components/MintForm';
+import SVGGenerator from '../components/SVGGenerator';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
@@ -26,6 +27,14 @@ const Home: NextPage = () => {
             <MintForm />
           </Card>
         )}
+      </Container>
+      <Container size="md" px="0" className={styles['mint-container']}>
+        <SVGGenerator
+          prediction="Real world assets will make up 50% of defi TVL"
+          twitterName="@Lucasvo"
+          width={300}
+          height={300}
+        />
       </Container>
     </Container>
   );
