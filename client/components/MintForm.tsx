@@ -3,10 +3,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Loader, Stack, Text, TextInput } from '@mantine/core';
 import useMintTimeCapsule from '../hooks/useMintTimeCapsule';
-import styles from '../styles/Home.module.css';
+import SVGgenerator from '../hooks/SVGGenerator';
 import { Inputs } from '../types';
 import validationSchema from '../utilities/validationSchema';
 import { Input } from './Input';
+import styles from '../styles/Home.module.css';
 
 const { NETWORK } = process.env;
 
@@ -21,12 +22,16 @@ export const MintForm = () => {
 
   const { mutate, data, isLoading } = useMintTimeCapsule();
 
-  const onSubmit: SubmitHandler<Inputs> = (inputs: Inputs) =>
-    mutate({
+  const onSubmit: SubmitHandler<Inputs> = (inputs: Inputs) => {
+    console.log(
+      SVGgenerator(inputs.prediction, inputs.twitterHandle, 400, 400),
+    );
+    return mutate({
       polygonAddress: inputs.polygonAddress,
       prediction: inputs.prediction,
       twitterHandle: inputs.twitterHandle,
     });
+  };
 
   const explorerUrl = useMemo(
     () =>
