@@ -12,7 +12,7 @@ import '../styles/globals.css';
 
 const queryClient = new QueryClient();
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery('(max-width: 599px)');
 
@@ -51,4 +51,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default App;
