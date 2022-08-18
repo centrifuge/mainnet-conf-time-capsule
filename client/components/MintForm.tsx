@@ -1,12 +1,18 @@
 import { useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Loader, Stack, Text, TextInput } from '@mantine/core';
+import {
+  Button,
+  Loader,
+  Stack,
+  Text,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
 import useMintTimeCapsule from '../hooks/useMintTimeCapsule';
 import generateSVG from '../utilities/generateSVG';
 import { Inputs } from '../types';
 import validationSchema from '../utilities/validationSchema';
-import { Input } from './Input';
 import styles from '../styles/Home.module.css';
 
 const { NETWORK } = process.env;
@@ -15,6 +21,7 @@ export const MintForm = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<Inputs>({
     resolver: yupResolver(validationSchema),
@@ -32,6 +39,8 @@ export const MintForm = () => {
       svg,
     });
   };
+
+  const predictionLength = watch('prediction')?.length || 0;
 
   const explorerUrl = useMemo(
     () =>
@@ -74,31 +83,45 @@ export const MintForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles['mint-form']}>
       <Stack spacing={24}>
-        <Input
+        <TextInput
+          className={styles['mint-input']}
+          error={errors.polygonAddress && errors.polygonAddress.message}
           label="Polygon Address"
           id="polygonAddress"
-          register={register}
-          error={errors.polygonAddress}
-          placeholder="0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+          placeholder="0x..."
+          {...register('polygonAddress')}
         />
-        <Input
+
+        <TextInput
+          className={styles['mint-input']}
+          error={errors.twitterHandle && errors.twitterHandle.message}
           label="Twitter Handle"
           id="twitterHandle"
-          register={register}
-          error={errors.twitterHandle}
-          placeholder="@elon_musk"
+          placeholder="@satoshi_nakamoto"
+          {...register('twitterHandle')}
         />
-        <Input
-          label="Your 2023 DeFi Prediction"
-          id="prediction"
-          register={register}
-          error={errors.prediction}
-          placeholder="In 2023..."
-        />
+
+        <div>
+          <Textarea
+            className={styles['mint-input']}
+            error={errors.prediction && errors.prediction.message}
+            label="Your 2023 DeFi Prediction"
+            id="prediction"
+            placeholder="In 2023..."
+            {...register('prediction')}
+          />
+
+          <Text
+            size={12}
+            align="end"
+            color={predictionLength > 200 ? 'red' : 'dark'}
+          >
+            {predictionLength}/200
+          </Text>
+        </div>
         <div className={styles.captcha}>
           <TextInput {...register('captcha')} />
         </div>
-
         <div className={styles['mint-button']}>
           <Button type="submit" color="dark">
             Mint NFT
