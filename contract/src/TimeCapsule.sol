@@ -10,10 +10,12 @@ contract TimeCapsule is Ownable, ERC721Enumerable {
     }
 
     string private _baseTokenURI;
+    mapping (uint256 => string) private metadataIDs;
 
-    function mint(address to) public payable {
+    function mint(address to, string memory metadataID) public payable {
         uint256 id = totalSupply();
         _safeMint(to, id);
+        metadataIDs[id] = metadataID;
     }
 
     function burn(uint256 id) onlyOwner public {
@@ -32,17 +34,10 @@ contract TimeCapsule is Ownable, ERC721Enumerable {
         return _baseTokenURI;
     }
 
-    //---------------------/ UTILS /---------------------//
+    function tokenURI(uint tokenId) public view override returns (string memory) {
+        _requireMinted(tokenId);
 
-    function stringToUint(string memory _str) public pure returns(uint256 res, bool err) {
-    
-    for (uint256 i = 0; i < bytes(_str).length; i++) {
-        if ((uint8(bytes(_str)[i]) - 48) < 0 || (uint8(bytes(_str)[i]) - 48) > 9) {
-            return (0, false);
-        }
-        res += (uint8(bytes(_str)[i]) - 48) * 10**(bytes(_str).length - i - 1);
+        string memory baseURI = _baseURI();
+        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, metadataIDs[tokenId])) : "";
     }
-    
-    return (res, true);
-}
 }

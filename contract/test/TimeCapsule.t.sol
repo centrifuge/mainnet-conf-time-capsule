@@ -12,37 +12,48 @@ contract TimeCapsuleTest is Test {
         assertEq(address(timeCap.owner()), address(this));
     }
 
+    function testMintAndURISuccess(address addr) public {
+        string memory baseURI = 'thing.com/';
+        string memory metadataID = 'wkr9AxtYkuxVfEiUHHqD';
+        vm.assume(addr != address(0));
+        vm.assume(addr.code.length <= 0);
+        timeCap.mint(addr, metadataID);
+        timeCap.setBaseURI(baseURI);
+        assertEq(timeCap.ownerOf(0), addr);
+        assertEq(keccak256(abi.encodePacked(timeCap.tokenURI(0))), keccak256(abi.encodePacked(string.concat(baseURI, metadataID))));
+    }
+    
     function testMintSuccess(address addr) public {
         vm.assume(addr != address(0));
         vm.assume(addr.code.length <= 0);
-        timeCap.mint(addr);
+        timeCap.mint(addr, 'wkr9AxtYkuxVfEiUHHqD');
         assertEq(timeCap.ownerOf(0), addr);
     }
 
     function testMintTwiceSuccess(address addr) public {
         vm.assume(addr != address(0));
         vm.assume(addr.code.length <= 0);
-        timeCap.mint(addr);
-        timeCap.mint(addr);
+        timeCap.mint(addr, 'wkr9AxtYkuxVfEiUHHqD');
+        timeCap.mint(addr, 'wkr9AxtYkuxVfEiUHHqD');
         assertEq(timeCap.ownerOf(0), addr);
         assertEq(timeCap.ownerOf(1), addr);
     }
 
 
     function testFailMintToZero() public {
-        timeCap.mint(address(0));
+        timeCap.mint(address(0), 'wkr9AxtYkuxVfEiUHHqD');
         assertEq(timeCap.ownerOf(0), address(0));
     }
 
     function testFailMintToContract() public {
-        timeCap.mint(address(this));
+        timeCap.mint(address(this), 'wkr9AxtYkuxVfEiUHHqD');
         assertEq(timeCap.ownerOf(0), address(this));
     }
 
     function testBurn(address addr) public {
         vm.assume(addr != address(0));
         vm.assume(addr.code.length <= 0);
-        timeCap.mint(addr);
+        timeCap.mint(addr, 'wkr9AxtYkuxVfEiUHHqD');
         assertEq(timeCap.ownerOf(0), addr);
         timeCap.burn(0);
         vm.expectRevert("ERC721: invalid token ID");
@@ -54,7 +65,7 @@ contract TimeCapsuleTest is Test {
         vm.assume(addr2 != address(0));
         vm.assume(addr2 != address(this));
         vm.assume(addr1.code.length <= 0);
-        timeCap.mint(addr1);
+        timeCap.mint(addr1, 'wkr9AxtYkuxVfEiUHHqD');
         assertEq(timeCap.ownerOf(0), addr1);
         vm.expectRevert("Ownable: caller is not the owner");
         vm.prank(addr2);
@@ -72,11 +83,5 @@ contract TimeCapsuleTest is Test {
         vm.expectRevert("Ownable: caller is not the owner");
         vm.prank(addr1);
         timeCap.setBaseURI(baseURI);
-    }
-
-    function testStringToUint() public {
-        (uint output, bool err) = timeCap.stringToUint('hello');
-        console.log(err);
-        console.log(output);
     }
 }
