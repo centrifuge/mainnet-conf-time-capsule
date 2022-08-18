@@ -7,6 +7,12 @@ import { TimeCapsule } from '../../../types';
 
 type Response = {} | TimeCapsule | Error | string;
 
+interface Request extends NextApiRequest {
+  query: {
+    id: string;
+  };
+}
+
 const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
 async function getTimeCapsule(id: string) {
@@ -45,7 +51,7 @@ async function getTimeCapsule(id: string) {
 }
 
 export default async function handler(
-  req: NextApiRequest,
+  req: Request,
   res: NextApiResponse<Response>,
 ) {
   const { query, method } = req;
@@ -55,7 +61,7 @@ export default async function handler(
   }
 
   try {
-    const timeCapsule = await getTimeCapsule(query.id as string);
+    const timeCapsule = await getTimeCapsule(query.id);
 
     res.status(200).json(timeCapsule);
   } catch (error) {

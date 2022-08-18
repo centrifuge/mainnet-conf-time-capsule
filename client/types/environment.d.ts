@@ -7,5 +7,6 @@ declare namespace NodeJS {
     HOT_WALLET_PRIVATE_KEY: string;
     NETWORK: string;
     INFURA_RPC_URL: string;
+    MINT_CONTRACT_ADDRESS: string;
   }
 }

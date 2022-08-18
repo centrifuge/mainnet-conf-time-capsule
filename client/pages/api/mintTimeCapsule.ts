@@ -39,14 +39,15 @@ async function addToDb(
 }
 
 async function handleMint(polygonAddress: string) {
-  const { INFURA_RPC_URL, HOT_WALLET_PRIVATE_KEY } = process.env;
+  const { INFURA_RPC_URL, HOT_WALLET_PRIVATE_KEY, MINT_CONTRACT_ADDRESS } =
+    process.env;
 
   const provider = new ethers.providers.JsonRpcProvider(INFURA_RPC_URL);
 
-  const privateKey = HOT_WALLET_PRIVATE_KEY as string;
+  const privateKey = HOT_WALLET_PRIVATE_KEY;
   const signer = new ethers.Wallet(privateKey, provider);
 
-  const address = '0x936E7043f204cd36Cd92009d44BF6b8129f6007B';
+  const address = MINT_CONTRACT_ADDRESS;
 
   const timeCapsuleNftContract = new ethers.Contract(address, abi, signer);
 
