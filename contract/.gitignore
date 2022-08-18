@@ -1,0 +1,8 @@
+# local env files
+.env
+.env*.local
+
+# forge
+cache/
+out/
+broadcast/
