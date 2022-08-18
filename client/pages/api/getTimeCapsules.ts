@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 // eslint-disable-next-line import/no-unresolved
-import { initializeApp, cert, ServiceAccount } from 'firebase-admin/app';
+import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-import serviceAccountKey from '../../../nft-time-capsule-service-account.json';
 
 type TimeCapsule = {
   id: string;
@@ -13,10 +12,18 @@ type TimeCapsule = {
   svg: string;
 };
 
+type Response = TimeCapsule[] | Error | string;
+
+const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
+
 async function getTimeCapsules() {
   try {
     initializeApp({
-      credential: cert(serviceAccountKey as ServiceAccount),
+      credential: cert({
+        clientEmail: GCP_CLIENT_EMAIL,
+        privateKey: GCP_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        projectId: GCP_PROJECT_ID,
+      }),
     });
     // eslint-disable-next-line no-empty
   } catch {}
@@ -44,7 +51,7 @@ async function getTimeCapsules() {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<any>,
+  res: NextApiResponse<Response>,
 ) {
   const { method } = req;
 

@@ -40,6 +40,3 @@ next-env.d.ts
 cache/
 out/
 broadcast/
-
-# google
-nft-time-capsule-service-account.json

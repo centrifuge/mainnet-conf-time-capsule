@@ -1,18 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ethers } from 'ethers';
 // eslint-disable-next-line import/no-unresolved
-import { initializeApp, cert, ServiceAccount } from 'firebase-admin/app';
+import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
 import abi from '../../utilities/abi.json';
-import serviceAccountKey from '../../../nft-time-capsule-service-account.json';
 
-type Data =
-  | {
-      hash: string;
-    }
-  | Error
-  | string;
+type Response = { hash: string } | Error | string;
+
+const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
 async function addToDb(
   polygonAddress: string,
@@ -22,7 +18,11 @@ async function addToDb(
 ) {
   try {
     initializeApp({
-      credential: cert(serviceAccountKey as ServiceAccount),
+      credential: cert({
+        clientEmail: GCP_CLIENT_EMAIL,
+        privateKey: GCP_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        projectId: GCP_PROJECT_ID,
+      }),
     });
     // eslint-disable-next-line no-empty
   } catch {}
@@ -57,7 +57,7 @@ async function handleMint(polygonAddress: string) {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<Response>,
 ) {
   const { method } = req;
 
