@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Loader, Stack, Text, TextInput } from '@mantine/core';
 import useMintTimeCapsule from '../hooks/useMintTimeCapsule';
-import SVGgenerator from '../hooks/SVGGenerator';
+import generateSVG from '../utilities/generateSVG';
 import { Inputs } from '../types';
 import validationSchema from '../utilities/validationSchema';
 import { Input } from './Input';
@@ -23,7 +23,7 @@ export const MintForm = () => {
   const { mutate, data, isLoading } = useMintTimeCapsule();
 
   const onSubmit: SubmitHandler<Inputs> = (inputs: Inputs) => {
-    const svg = SVGgenerator(inputs.prediction, inputs.twitterHandle, 400, 400);
+    const svg = generateSVG(inputs.prediction, inputs.twitterHandle, 400, 400);
 
     return mutate({
       polygonAddress: inputs.polygonAddress,

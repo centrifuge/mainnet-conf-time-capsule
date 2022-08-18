@@ -1,4 +1,4 @@
-export default function SVGGenerator(
+export default function generateSVG(
   prediction: string,
   twitterName: string,
   width: number,
