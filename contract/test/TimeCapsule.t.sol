@@ -72,6 +72,11 @@ contract TimeCapsuleTest is Test {
         vm.expectRevert("Ownable: caller is not the owner");
         vm.prank(addr1);
         timeCap.setBaseURI(baseURI);
+    }
 
+    function testStringToUint() public {
+        (uint output, bool err) = timeCap.stringToUint('hello');
+        console.log(err);
+        console.log(output);
     }
 }
