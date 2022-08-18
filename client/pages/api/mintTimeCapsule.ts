@@ -6,11 +6,29 @@ import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import abi from '../../utilities/abi.json';
 
-type Response = { hash: string } | Error | string;
+type Response = { hash: string; svg: string } | Error | string;
 
 const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
+async function deleteFromDb(id: string) {
+  try {
+    initializeApp({
+      credential: cert({
+        clientEmail: GCP_CLIENT_EMAIL,
+        privateKey: GCP_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        projectId: GCP_PROJECT_ID,
+      }),
+    });
+    // eslint-disable-next-line no-empty
+  } catch {}
+
+  const db = getFirestore();
+
+  await db.collection('predictions').doc(id).delete();
+}
+
 async function addToDb(
+  id: string,
   polygonAddress: string,
   prediction: string,
   twitterHandle: string,
@@ -26,9 +44,10 @@ async function addToDb(
     });
     // eslint-disable-next-line no-empty
   } catch {}
+
   const db = getFirestore();
 
-  const docRef = db.collection('predictions').doc();
+  const docRef = db.collection('predictions').doc(id);
 
   await docRef.set({
     polygonAddress,
@@ -38,7 +57,7 @@ async function addToDb(
   });
 }
 
-async function handleMint(polygonAddress: string) {
+async function handleMint(polygonAddress: string, uniqueId: string) {
   const { INFURA_RPC_URL, HOT_WALLET_PRIVATE_KEY, MINT_CONTRACT_ADDRESS } =
     process.env;
 
@@ -51,7 +70,7 @@ async function handleMint(polygonAddress: string) {
 
   const timeCapsuleNftContract = new ethers.Contract(address, abi, signer);
 
-  const result = await timeCapsuleNftContract.mint(polygonAddress);
+  const result = await timeCapsuleNftContract.mint(polygonAddress, uniqueId);
 
   return result;
 }
@@ -66,15 +85,27 @@ export default async function handler(
     res.status(405).send('Method not allowed. Use POST.');
   }
 
+  const uniqueId = Math.ceil(Math.random() * (2 ** 53 - 1)).toString();
+
   try {
     const { polygonAddress, prediction, twitterHandle, svg } = req.body;
 
-    const { hash } = await handleMint(polygonAddress);
+    await addToDb(uniqueId, polygonAddress, prediction, twitterHandle, svg);
 
-    await addToDb(polygonAddress, prediction, twitterHandle, svg);
+    const { hash, wait } = await handleMint(polygonAddress, uniqueId);
 
-    res.status(200).json({ hash });
+    const { status } = await wait();
+
+    if (status === 1) {
+      res.status(200).json({ hash, svg });
+    } else {
+      await deleteFromDb(uniqueId);
+
+      res.status(500).json(new Error('Internal server error'));
+    }
   } catch (error) {
+    await deleteFromDb(uniqueId);
+
     res.status(500).json(new Error('Internal server error'));
   }
 }
