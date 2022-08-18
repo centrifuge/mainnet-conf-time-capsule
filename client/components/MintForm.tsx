@@ -23,13 +23,13 @@ export const MintForm = () => {
   const { mutate, data, isLoading } = useMintTimeCapsule();
 
   const onSubmit: SubmitHandler<Inputs> = (inputs: Inputs) => {
-    console.log(
-      SVGgenerator(inputs.prediction, inputs.twitterHandle, 400, 400),
-    );
+    const svg = SVGgenerator(inputs.prediction, inputs.twitterHandle, 400, 400);
+
     return mutate({
       polygonAddress: inputs.polygonAddress,
       prediction: inputs.prediction,
       twitterHandle: inputs.twitterHandle,
+      svg,
     });
   };
 
