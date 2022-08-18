@@ -3,16 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
+import { TimeCapsule } from '../../../types';
 
-type TimeCapsule = {
-  id: string;
-  twitterHandle: string;
-  prediction: string;
-  polygonAddress: string;
-  svg: string;
-};
-
-type Response = Partial<TimeCapsule> | Error | string;
+type Response = {} | TimeCapsule | Error | string;
 
 const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
@@ -47,6 +40,7 @@ async function getTimeCapsule(id: string) {
       };
     }
   });
+
   return timeCapsule;
 }
 

@@ -3,14 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-
-type TimeCapsule = {
-  id: string;
-  twitterHandle: string;
-  prediction: string;
-  polygonAddress: string;
-  svg: string;
-};
+import { TimeCapsule } from '../../types';
 
 type Response = TimeCapsule[] | Error | string;
 

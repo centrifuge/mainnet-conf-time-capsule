@@ -11,7 +11,7 @@ export default function generateSVG(
       >
         <defs>
           <style>
-            @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Roboto&amp;display=swap');
           </style>
           <style>
           .foreign-object {
@@ -72,7 +72,7 @@ export default function generateSVG(
               <div class="title">2023 DeFi Predictions</div>
               <div class="main-content">
                 <textArea disabled xmlns="http://www.w3.org/1999/xhtml">"${prediction}"</textArea>
-                <div class="twitter">-${twitterName}</div>
+                <div class="twitter">-${twitterName || 'anonymous'}</div>
               </div>
               <div class="footer">Centrifuge Time Capsule</div>
             </div>
