@@ -41,6 +41,6 @@ $ yarn dev
 
 | Type   | Endpoint                  | Body                                                                         | Response                                                                                            |
 | ------ | ------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `POST` | `/api/mintTimeCapsule`    | `{ twitterHandle: string; polygonAddress: string; defiPrediction: string; }` | `{ hash: string; }`                                                                                 |
+| `POST` | `/api/mintTimeCapsule`    | `{ twitterHandle: string; polygonAddress: string; defiPrediction: string; }` | `{ hash: string; svg: string; }`                                                                    |
 | `GET`  | `/api/getTimeCapsules`    | `--`                                                                         | `{ id: string; twitterHandle: string; prediction: string; polygonAddress: string; svg: string; }[]` |
 | `GET`  | `/api/getTimeCapsule/:id` | `--`                                                                         | `{ id: string; twitterHandle: string; prediction: string; polygonAddress: string; svg: string; }`   |
