@@ -8,3 +8,11 @@ export type Inputs = {
 };
 
 export type ValidationSchema = typeof validationSchema;
+
+export type TimeCapsule = {
+  id: string;
+  twitterHandle: string;
+  prediction: string;
+  polygonAddress: string;
+  svg: string;
+};
