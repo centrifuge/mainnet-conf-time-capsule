@@ -9,6 +9,7 @@ import {
   Textarea,
   TextInput,
 } from '@mantine/core';
+import DOMParserReact from 'dom-parser-react';
 import useMintTimeCapsule from '../hooks/useMintTimeCapsule';
 import generateSVG from '../utilities/generateSVG';
 import { Inputs } from '../types';
@@ -54,7 +55,7 @@ export const MintForm = () => {
     return (
       <div className={styles.success}>
         <Text span align="center">
-          Successfully submitted! See your
+          Successfully minted! See your
           <span style={{ marginLeft: '4px' }} />
           <Text
             span
@@ -66,6 +67,7 @@ export const MintForm = () => {
             transaction
           </Text>
           <Text span>.</Text>
+          <DOMParserReact source={data.svg} />
         </Text>
       </div>
     );
@@ -114,9 +116,9 @@ export const MintForm = () => {
           <Text
             size={12}
             align="end"
-            color={predictionLength > 200 ? 'red' : 'dark'}
+            color={predictionLength > 140 ? 'red' : 'dark'}
           >
-            {predictionLength}/200
+            {predictionLength}/140
           </Text>
         </div>
         <div className={styles.captcha}>

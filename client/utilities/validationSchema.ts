@@ -15,7 +15,7 @@ const validationSchema = object().shape({
     }),
   prediction: string()
     .trim()
-    .max(200, 'Prediction is too long')
+    .max(140, 'Prediction is too long')
     .required('Prediction is required'),
   twitterHandle: string()
     .trim()
