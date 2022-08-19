@@ -28,7 +28,8 @@ async function getTimeCapsules() {
   const timeCapsules: TimeCapsule[] = [];
 
   snapshot.forEach(doc => {
-    const { twitterHandle, prediction, polygonAddress, svg } = doc.data();
+    const { twitterHandle, prediction, polygonAddress, svg, status } =
+      doc.data();
 
     timeCapsules.push({
       id: doc.id,
@@ -36,6 +37,7 @@ async function getTimeCapsules() {
       prediction,
       polygonAddress,
       svg,
+      status,
     });
   });
 

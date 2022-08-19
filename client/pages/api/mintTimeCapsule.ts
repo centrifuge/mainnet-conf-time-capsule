@@ -5,6 +5,7 @@ import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
 import abi from '../../utilities/abi.json';
+import { TimeCapsule } from '../../types';
 
 type Response = { hash: string; svg: string } | Error | string;
 
@@ -27,13 +28,14 @@ async function deleteFromDb(id: string) {
   await db.collection('predictions').doc(id).delete();
 }
 
-async function addToDb(
-  id: string,
-  polygonAddress: string,
-  prediction: string,
-  twitterHandle: string,
-  svg: string,
-) {
+async function addToDb({
+  id,
+  polygonAddress,
+  prediction,
+  twitterHandle,
+  svg,
+  status,
+}: TimeCapsule) {
   try {
     initializeApp({
       credential: cert({
@@ -54,6 +56,7 @@ async function addToDb(
     prediction,
     svg,
     twitterHandle,
+    status,
   });
 }
 
@@ -87,16 +90,25 @@ export default async function handler(
 
   const uniqueId = Math.ceil(Math.random() * (2 ** 53 - 1)).toString();
 
-  try {
-    const { polygonAddress, prediction, twitterHandle, svg } = req.body;
+  const { polygonAddress, prediction, twitterHandle, svg } = req.body;
 
-    await addToDb(uniqueId, polygonAddress, prediction, twitterHandle, svg);
+  const timeCapsule = {
+    id: uniqueId,
+    polygonAddress,
+    prediction,
+    twitterHandle,
+    svg,
+  };
+
+  try {
+    await addToDb({ ...timeCapsule, status: 'pending' });
 
     const { hash, wait } = await handleMint(polygonAddress, uniqueId);
 
     const { status } = await wait();
 
     if (status === 1) {
+      await addToDb({ ...timeCapsule, status: 'minted' });
       res.status(200).json({ hash, svg });
     } else {
       await deleteFromDb(uniqueId);
@@ -104,7 +116,7 @@ export default async function handler(
       res.status(500).json(new Error('Internal server error'));
     }
   } catch (error) {
-    await deleteFromDb(uniqueId);
+    await addToDb({ ...timeCapsule, status: 'failed' });
 
     res.status(500).json(new Error('Internal server error'));
   }

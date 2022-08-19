@@ -39,8 +39,8 @@ $ yarn dev
 
 #### API Spec
 
-| Type   | Endpoint                  | Body                                                                         | Response                                                                                            |
-| ------ | ------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `POST` | `/api/mintTimeCapsule`    | `{ twitterHandle: string; polygonAddress: string; defiPrediction: string; }` | `{ hash: string; svg: string; }`                                                                    |
-| `GET`  | `/api/getTimeCapsules`    | `--`                                                                         | `{ id: string; twitterHandle: string; prediction: string; polygonAddress: string; svg: string; }[]` |
-| `GET`  | `/api/getTimeCapsule/:id` | `--`                                                                         | `{ id: string; twitterHandle: string; prediction: string; polygonAddress: string; svg: string; }`   |
+| Type   | Endpoint                  | Body                                                                         | Response                                                                                                        |
+| ------ | ------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------- | --------------- |
+| `POST` | `/api/mintTimeCapsule`    | `{ twitterHandle: string; polygonAddress: string; defiPrediction: string; }` | `{ hash: string; svg: string; }`                                                                                |
+| `GET`  | `/api/getTimeCapsules`    | `--`                                                                         | `{ id: string; twitterHandle: string; prediction: string; polygonAddress: string; svg: string; status: 'failed' | 'minted' | 'pending'; }[]` |
+| `GET`  | `/api/getTimeCapsule/:id` | `--`                                                                         | `{ id: string; twitterHandle: string; prediction: string; polygonAddress: string; svg: string; status: 'failed' | 'minted' | 'pending'; }`   |

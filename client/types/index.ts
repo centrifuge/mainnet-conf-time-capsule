@@ -15,4 +15,5 @@ export type TimeCapsule = {
   prediction: string;
   polygonAddress: string;
   svg: string;
+  status: 'failed' | 'minted' | 'pending';
 };
