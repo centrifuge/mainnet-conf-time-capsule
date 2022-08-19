@@ -6,6 +6,7 @@ import {
   MantineProvider,
   useMantineTheme,
 } from '@mantine/core';
+import { useRouter } from 'next/router';
 import { useMediaQuery } from '@mantine/hooks';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
@@ -16,6 +17,7 @@ const queryClient = new QueryClient();
 function App({ Component, pageProps }: AppProps) {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery('(max-width: 599px)');
+  const { pathname } = useRouter();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -32,7 +34,10 @@ function App({ Component, pageProps }: AppProps) {
               paddingRight: isMobile ? '0' : undefined,
               paddingLeft: isMobile ? '0' : undefined,
               justifyItems: 'center',
-              background: isMobile ? 'white' : theme.colors.gray[0],
+              background:
+                isMobile && !pathname.includes('gallery')
+                  ? 'white'
+                  : theme.colors.gray[0],
             },
           }}
           header={

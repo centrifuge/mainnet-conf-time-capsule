@@ -22,20 +22,36 @@ const Gallery: NextPage = () => {
   }
 
   return (
-    <Container px="0">
-      <Container size="md" px="0" className={styles['mint-container']}>
-        {isMobile ? (
-          <Container px="24px" mx={0} pt="48px">
-            {data.map(({ id, svg }: TimeCapsule) => (
+    <Container
+      px="16px"
+      style={{ maxWidth: '100%' }}
+      className={styles['gallery-container']}
+    >
+      {isMobile ? (
+        <Container px="24px" mx={0} pt="48px">
+          {data.map(({ id, svg }: TimeCapsule) => (
+            <a
+              href={`https://timecapsule.centrifuge.io/capsule/${id}`}
+              target="_black"
+              className={styles['gallery-item']}
+            >
               <DOMParserReact key={id} source={svg} />
-            ))}
-          </Container>
-        ) : (
-          data.map(({ id, svg }: TimeCapsule) => (
-            <DOMParserReact key={id} source={svg} />
-          ))
-        )}
-      </Container>
+            </a>
+          ))}
+        </Container>
+      ) : (
+        data.map(({ id, svg }: TimeCapsule) => (
+          <a
+            href={`https://timecapsule.centrifuge.io/capsule/${id}`}
+            target="_black"
+            className={styles['gallery-item']}
+          >
+            <div>
+              <DOMParserReact key={id} source={svg} />
+            </div>
+          </a>
+        ))
+      )}
     </Container>
   );
 };
