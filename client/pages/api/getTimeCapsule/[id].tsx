@@ -1,55 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-// eslint-disable-next-line import/no-unresolved
-import { initializeApp, cert } from 'firebase-admin/app';
-// eslint-disable-next-line import/no-unresolved
-import { getFirestore } from 'firebase-admin/firestore';
-import { TimeCapsule } from '../../../types';
+import getTimeCapsuleFromBucket from '../../../utilities/db/getTimeCapsuleFromBucket';
+import getTimeCapsuleFromFirestore from '../../../utilities/db/getTimeCapsuleFromFirestore';
+import queryTimeCapsule from '../../../utilities/queries/queryTimeCapsule';
 
-type Response = {} | TimeCapsule | Error | string;
+type Response =
+  | unknown
+  | string
+  | boolean
+  | { status: 'pending' | 'minted'; hash?: string; svgLink?: string };
 
 interface Request extends NextApiRequest {
   query: {
     id: string;
   };
-}
-
-const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
-
-async function getTimeCapsule(id: string) {
-  try {
-    initializeApp({
-      credential: cert({
-        clientEmail: GCP_CLIENT_EMAIL,
-        privateKey: GCP_PRIVATE_KEY.replace(/\\n/g, '\n'),
-        projectId: GCP_PROJECT_ID,
-      }),
-    });
-    // eslint-disable-next-line no-empty
-  } catch {}
-
-  const db = getFirestore();
-
-  const snapshot = await db.collection('predictions').get();
-
-  let timeCapsule = {};
-
-  snapshot.forEach(doc => {
-    const { twitterHandle, prediction, polygonAddress, svg, status } =
-      doc.data();
-
-    if (doc.id === id) {
-      timeCapsule = {
-        id: doc.id,
-        twitterHandle,
-        prediction,
-        polygonAddress,
-        svg,
-        status,
-      };
-    }
-  });
-
-  return timeCapsule;
 }
 
 export default async function handler(
@@ -63,10 +26,27 @@ export default async function handler(
   }
 
   try {
-    const timeCapsule = await getTimeCapsule(query.id);
+    const { nft } = await queryTimeCapsule(query.id);
 
-    res.status(200).json(timeCapsule);
+    if (nft) {
+      const svgLink = await getTimeCapsuleFromBucket(query.id);
+
+      if (svgLink) {
+        res.status(200).json({
+          status: 'minted',
+          svgLink,
+        });
+      }
+    } else {
+      const metadata = await getTimeCapsuleFromFirestore(query.id);
+
+      if (metadata) {
+        res.status(200).json({ status: 'pending', hash: metadata.hash });
+      } else {
+        res.status(200).json(false);
+      }
+    }
   } catch (error) {
-    res.status(500).json(new Error('Internal server error'));
+    res.status(500).json(error);
   }
 }

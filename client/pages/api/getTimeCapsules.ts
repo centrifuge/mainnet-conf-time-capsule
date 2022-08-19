@@ -1,48 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-// eslint-disable-next-line import/no-unresolved
-import { initializeApp, cert } from 'firebase-admin/app';
-// eslint-disable-next-line import/no-unresolved
-import { getFirestore } from 'firebase-admin/firestore';
-import { TimeCapsule } from '../../types';
+import getTimeCapsules from '../../utilities/db/getTimeCapsules';
+import queryTimeCapsules from '../../utilities/queries/queryTimeCapsules';
 
-type Response = TimeCapsule[] | Error | string;
-
-const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
-
-async function getTimeCapsules() {
-  try {
-    initializeApp({
-      credential: cert({
-        clientEmail: GCP_CLIENT_EMAIL,
-        privateKey: GCP_PRIVATE_KEY.replace(/\\n/g, '\n'),
-        projectId: GCP_PROJECT_ID,
-      }),
-    });
-    // eslint-disable-next-line no-empty
-  } catch {}
-
-  const db = getFirestore();
-
-  const snapshot = await db.collection('predictions').get();
-
-  const timeCapsules: TimeCapsule[] = [];
-
-  snapshot.forEach(doc => {
-    const { twitterHandle, prediction, polygonAddress, svg, status } =
-      doc.data();
-
-    timeCapsules.push({
-      id: doc.id,
-      twitterHandle,
-      prediction,
-      polygonAddress,
-      svg,
-      status,
-    });
-  });
-
-  return timeCapsules;
-}
+type Response = { id: string; svgLink: string }[] | unknown | string;
 
 export default async function handler(
   req: NextApiRequest,
@@ -55,10 +15,29 @@ export default async function handler(
   }
 
   try {
-    const timeCapsules = await getTimeCapsules();
+    const timeCapsulesFromFirestore = await getTimeCapsules();
+
+    const timeCapsuleDictionary = timeCapsulesFromFirestore.reduce<{
+      [id: string]: string;
+    }>(
+      (acc, cur) => ({
+        ...acc,
+        [cur.id]: cur.svgLink,
+      }),
+      {},
+    );
+
+    const { nfts } = await queryTimeCapsules();
+
+    const timeCapsules = nfts
+      .map((nft: { id: string; svg: string }) => ({
+        id: nft.id,
+        svgLink: timeCapsuleDictionary[nft.id],
+      }))
+      .filter(({ svgLink }: { svgLink?: string }) => svgLink);
 
     res.status(200).json(timeCapsules);
   } catch (error) {
-    res.status(500).json(new Error('Internal server error'));
+    res.status(500).json(error);
   }
 }

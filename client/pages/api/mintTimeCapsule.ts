@@ -1,82 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { ethers } from 'ethers';
-// eslint-disable-next-line import/no-unresolved
-import { initializeApp, cert } from 'firebase-admin/app';
-// eslint-disable-next-line import/no-unresolved
-import { getFirestore } from 'firebase-admin/firestore';
-import abi from '../../utilities/abi.json';
-import { TimeCapsule } from '../../types';
+import fs from 'fs/promises';
+import path from 'path';
+import os from 'os';
+import addToBucket from '../../utilities/db/addToBucket';
+import addToFirestore from '../../utilities/db/addToFirestore';
+import handleMint from '../../utilities/handleMint';
+import getTimeCapsuleFromBucket from '../../utilities/db/getTimeCapsuleFromBucket';
 
-type Response = { hash: string; svg: string; id: string } | Error | string;
-
-const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
-
-async function deleteFromDb(id: string) {
-  try {
-    initializeApp({
-      credential: cert({
-        clientEmail: GCP_CLIENT_EMAIL,
-        privateKey: GCP_PRIVATE_KEY.replace(/\\n/g, '\n'),
-        projectId: GCP_PROJECT_ID,
-      }),
-    });
-    // eslint-disable-next-line no-empty
-  } catch {}
-
-  const db = getFirestore();
-
-  await db.collection('predictions').doc(id).delete();
-}
-
-async function addToDb({
-  id,
-  polygonAddress,
-  prediction,
-  twitterHandle,
-  svg,
-  status,
-}: TimeCapsule) {
-  try {
-    initializeApp({
-      credential: cert({
-        clientEmail: GCP_CLIENT_EMAIL,
-        privateKey: GCP_PRIVATE_KEY.replace(/\\n/g, '\n'),
-        projectId: GCP_PROJECT_ID,
-      }),
-    });
-    // eslint-disable-next-line no-empty
-  } catch {}
-
-  const db = getFirestore();
-
-  const docRef = db.collection('predictions').doc(id);
-
-  await docRef.set({
-    polygonAddress,
-    prediction,
-    svg,
-    twitterHandle,
-    status,
-  });
-}
-
-async function handleMint(polygonAddress: string, uniqueId: string) {
-  const { INFURA_RPC_URL, HOT_WALLET_PRIVATE_KEY, MINT_CONTRACT_ADDRESS } =
-    process.env;
-
-  const provider = new ethers.providers.JsonRpcProvider(INFURA_RPC_URL);
-
-  const privateKey = HOT_WALLET_PRIVATE_KEY;
-  const signer = new ethers.Wallet(privateKey, provider);
-
-  const address = MINT_CONTRACT_ADDRESS;
-
-  const timeCapsuleNftContract = new ethers.Contract(address, abi, signer);
-
-  const result = await timeCapsuleNftContract.mint(polygonAddress, uniqueId);
-
-  return result;
-}
+type Response =
+  | {
+      hash: string;
+      id: string;
+    }
+  | unknown
+  | string;
 
 export default async function handler(
   req: NextApiRequest,
@@ -92,32 +29,36 @@ export default async function handler(
 
   const { polygonAddress, prediction, twitterHandle, svg } = req.body;
 
-  const timeCapsule = {
-    id: uniqueId,
-    polygonAddress,
-    prediction,
-    twitterHandle,
-    svg,
-  };
-
   try {
-    await addToDb({ ...timeCapsule, status: 'pending' });
+    const tempPath = os.tmpdir();
 
-    const { hash, wait } = await handleMint(polygonAddress, uniqueId);
+    const { hash } = await handleMint(polygonAddress, uniqueId);
 
-    const { status } = await wait();
+    const filePath = path.join(tempPath, `${uniqueId}.svg`);
 
-    if (status === 1) {
-      await addToDb({ ...timeCapsule, status: 'minted' });
-      res.status(200).json({ hash, svg, id: uniqueId });
-    } else {
-      await deleteFromDb(uniqueId);
+    await fs.writeFile(filePath, svg);
 
-      res.status(500).json(new Error('Internal server error'));
-    }
+    await addToBucket(uniqueId, filePath);
+
+    const svgLink = await getTimeCapsuleFromBucket(uniqueId);
+
+    const timeCapsule = {
+      id: uniqueId,
+      polygonAddress,
+      prediction,
+      twitterHandle,
+      svg,
+      hash,
+      svgLink,
+    };
+
+    await addToFirestore(timeCapsule);
+
+    res.status(200).json({
+      hash,
+      id: uniqueId,
+    });
   } catch (error) {
-    await addToDb({ ...timeCapsule, status: 'failed' });
-
-    res.status(500).json(new Error('Internal server error'));
+    res.status(500).json(error);
   }
 }

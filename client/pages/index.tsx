@@ -14,12 +14,12 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push(`/time-capsule/${data.id}`);
+      router.push(`/capsule/${data.id}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
-  if (isLoading) {
+  if (isLoading || isSuccess) {
     return (
       <Container className={styles['page-loader']}>
         <div className={styles.loader}>

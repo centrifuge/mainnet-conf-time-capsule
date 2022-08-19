@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import { Container, Loader } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import DOMParserReact from 'dom-parser-react';
 import styles from '../styles/Home.module.css';
 import useGetTimeCapsules from '../hooks/useGetTimeCapsules';
 import { TimeCapsule } from '../types';
@@ -29,25 +28,25 @@ const Gallery: NextPage = () => {
     >
       {isMobile ? (
         <Container px="24px" mx={0} pt="48px">
-          {data.map(({ id, svg }: TimeCapsule) => (
+          {data.map(({ id, svgLink }: TimeCapsule) => (
             <a
               href={`https://timecapsule.centrifuge.io/capsule/${id}`}
               target="_black"
               className={styles['gallery-item']}
             >
-              <DOMParserReact key={id} source={svg} />
+              <img src={svgLink} alt="time-capsule" width={400} />
             </a>
           ))}
         </Container>
       ) : (
-        data.map(({ id, svg }: TimeCapsule) => (
+        data.map(({ id, svgLink }: TimeCapsule) => (
           <a
             href={`https://timecapsule.centrifuge.io/capsule/${id}`}
             target="_black"
             className={styles['gallery-item']}
           >
             <div>
-              <DOMParserReact key={id} source={svg} />
+              <img src={svgLink} alt="time-capsule" width={400} />
             </div>
           </a>
         ))

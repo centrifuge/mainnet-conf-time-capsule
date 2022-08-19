@@ -22,7 +22,7 @@ export const MintForm = ({ mint }: Props) => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = (inputs: Inputs) => {
-    const svg = generateSVG(inputs.prediction, inputs.twitterHandle, 400, 400);
+    const svg = generateSVG(inputs.prediction, inputs.twitterHandle);
 
     return mint({
       polygonAddress: inputs.polygonAddress,

@@ -17,10 +17,8 @@
     font-size: 20px;
   }
 
-  .success {
-    /* display: flex; */
-    font-size: 20px;
-    /* justify-content: center; */
+  .time-capsule > img {
+    width: 300px;
   }
 }
 
@@ -37,6 +35,10 @@
   .mint-button {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .time-capsule > img {
+    width: 600px;
   }
 }
 
@@ -57,11 +59,6 @@
   flex-direction: column;
   row-gap: 10px;
   align-items: center;
-}
-
-.success {
-  display: flex;
-  justify-content: center;
 }
 
 .logo img {
@@ -97,12 +94,18 @@
   display: flex;
 }
 
-.time-capsule-desktop {
+.time-capsule {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   padding-top: 50px;
+  row-gap: 24px;
+}
+
+.time-capsule > img {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
 
 .gallery-item div.card :hover {
