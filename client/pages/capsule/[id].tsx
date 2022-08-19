@@ -3,15 +3,17 @@ import { Container, Loader, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import DOMParserReact from 'dom-parser-react';
 import { useRouter } from 'next/router';
+import { IconBrandTwitter } from '@tabler/icons';
+import { TwitterShareButton } from 'react-share';
 import styles from '../../styles/Home.module.css';
 import useGetTimeCapsule from '../../hooks/useGetTimeCapsule';
 
 const Gallery: NextPage = () => {
   const isMobile = useMediaQuery('(max-width: 599px)');
 
-  const router = useRouter();
+  const { asPath, query } = useRouter();
 
-  const { data, isLoading } = useGetTimeCapsule(router.query.id as string);
+  const { data, isLoading } = useGetTimeCapsule(query.id as string);
 
   if (isLoading) {
     return (
@@ -51,6 +53,12 @@ const Gallery: NextPage = () => {
       ) : (
         <Container className={styles['time-capsule-desktop']}>
           <DOMParserReact source={data.svg} />
+          <TwitterShareButton
+            title="Check out my 2023 DeFi time capsule sponsored by @centrifuge!"
+            url={`https://timecapsule.centrifuge.io${asPath}`}
+          >
+            <IconBrandTwitter size={32} />
+          </TwitterShareButton>
         </Container>
       )}
     </Container>
