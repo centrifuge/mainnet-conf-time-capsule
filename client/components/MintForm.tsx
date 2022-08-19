@@ -38,6 +38,7 @@ export const MintForm = ({ mint }: Props) => {
     <form onSubmit={handleSubmit(onSubmit)} className={styles['mint-form']}>
       <Stack spacing={24}>
         <TextInput
+          spellCheck={false}
           className={styles['mint-input']}
           error={errors.polygonAddress && errors.polygonAddress.message}
           label="Polygon Address"
@@ -47,6 +48,7 @@ export const MintForm = ({ mint }: Props) => {
         />
 
         <TextInput
+          spellCheck={false}
           className={styles['mint-input']}
           error={errors.twitterHandle && errors.twitterHandle.message}
           label="Twitter Handle"
