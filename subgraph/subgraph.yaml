@@ -1,0 +1,25 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: TimeCapsule
+    network: mumbai
+    source:
+      address: "0xaecfa11fe9601c1b960661d7083a08a5df7c1947"
+      abi: TimeCapsule
+      startBlock: 27680333
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - TimeCapsule
+        - Transfer
+      abis:
+        - name: TimeCapsule
+          file: ./abis/TimeCapsule.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
