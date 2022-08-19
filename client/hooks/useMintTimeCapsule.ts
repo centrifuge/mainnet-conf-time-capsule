@@ -1,15 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-
-type Payload = {
-  polygonAddress: string;
-  prediction: string;
-  twitterHandle: string;
-  svg: string;
-};
+import { MintPayload } from '../types';
 
 const useMintTimeCapsule = () => {
-  const query = useMutation(async (payload: Payload) => {
+  const query = useMutation(async (payload: MintPayload) => {
     const { data } = await axios.post('/api/mintTimeCapsule', payload);
 
     return data;

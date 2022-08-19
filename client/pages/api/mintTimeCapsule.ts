@@ -7,7 +7,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 import abi from '../../utilities/abi.json';
 import { TimeCapsule } from '../../types';
 
-type Response = { hash: string; svg: string } | Error | string;
+type Response = { hash: string; svg: string; id: string } | Error | string;
 
 const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
@@ -109,7 +109,7 @@ export default async function handler(
 
     if (status === 1) {
       await addToDb({ ...timeCapsule, status: 'minted' });
-      res.status(200).json({ hash, svg });
+      res.status(200).json({ hash, svg, id: uniqueId });
     } else {
       await deleteFromDb(uniqueId);
 

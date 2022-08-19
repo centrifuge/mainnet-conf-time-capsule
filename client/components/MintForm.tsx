@@ -1,24 +1,17 @@
-import { useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  Button,
-  Loader,
-  Stack,
-  Text,
-  Textarea,
-  TextInput,
-} from '@mantine/core';
-import DOMParserReact from 'dom-parser-react';
-import useMintTimeCapsule from '../hooks/useMintTimeCapsule';
+import { UseMutateFunction } from '@tanstack/react-query';
+import { Button, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import generateSVG from '../utilities/generateSVG';
-import { Inputs } from '../types';
+import { Inputs, MintPayload } from '../types';
 import validationSchema from '../utilities/validationSchema';
 import styles from '../styles/Home.module.css';
 
-const { NETWORK } = process.env;
+type Props = {
+  mint: UseMutateFunction<any, unknown, MintPayload, unknown>;
+};
 
-export const MintForm = () => {
+export const MintForm = ({ mint }: Props) => {
   const {
     register,
     handleSubmit,
@@ -28,12 +21,10 @@ export const MintForm = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const { mutate, data, isLoading } = useMintTimeCapsule();
-
   const onSubmit: SubmitHandler<Inputs> = (inputs: Inputs) => {
     const svg = generateSVG(inputs.prediction, inputs.twitterHandle, 400, 400);
 
-    return mutate({
+    return mint({
       polygonAddress: inputs.polygonAddress,
       prediction: inputs.prediction,
       twitterHandle: inputs.twitterHandle,
@@ -42,45 +33,6 @@ export const MintForm = () => {
   };
 
   const predictionLength = watch('prediction')?.length || 0;
-
-  const explorerUrl = useMemo(
-    () =>
-      NETWORK === 'mainnet'
-        ? 'https://polygonscan.com'
-        : 'https://mumbai.polygonscan.com',
-    [],
-  );
-
-  if (data) {
-    return (
-      <div className={styles.success}>
-        <Text span align="center">
-          Successfully minted! See your
-          <span style={{ marginLeft: '4px' }} />
-          <Text
-            span
-            variant="link"
-            component="a"
-            href={`${explorerUrl}/tx/${data.hash}`}
-            target="_blank"
-          >
-            transaction
-          </Text>
-          <Text span>.</Text>
-          <DOMParserReact source={data.svg} />
-        </Text>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className={styles.loader}>
-        <Loader color="dark" />
-        <Text>Minting...</Text>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles['mint-form']}>

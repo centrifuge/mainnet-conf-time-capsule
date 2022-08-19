@@ -51,7 +51,6 @@
   flex-direction: column;
   row-gap: 10px;
   align-items: center;
-  justify-content: center;
 }
 
 .success {
@@ -76,4 +75,24 @@
 .captcha {
   visibility: hidden;
   height: 0px;
+}
+
+.page-loader {
+  height: 100%;
+  padding-top: 128px;
+  display: flex;
+  justify-content: center;
+}
+
+.mint-failed {
+  height: 100%;
+  padding-top: 128px;
+  justify-content: center;
+  display: flex;
+}
+
+.time-capsule-desktop {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
 }

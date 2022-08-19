@@ -17,3 +17,10 @@ export type TimeCapsule = {
   svg: string;
   status: 'failed' | 'minted' | 'pending';
 };
+
+export type MintPayload = {
+  polygonAddress: string;
+  prediction: string;
+  twitterHandle: string;
+  svg: string;
+};

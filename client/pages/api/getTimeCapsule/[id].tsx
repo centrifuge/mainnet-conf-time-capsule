@@ -34,7 +34,8 @@ async function getTimeCapsule(id: string) {
   let timeCapsule = {};
 
   snapshot.forEach(doc => {
-    const { twitterHandle, prediction, polygonAddress, svg } = doc.data();
+    const { twitterHandle, prediction, polygonAddress, svg, status } =
+      doc.data();
 
     if (doc.id === id) {
       timeCapsule = {
@@ -43,6 +44,7 @@ async function getTimeCapsule(id: string) {
         prediction,
         polygonAddress,
         svg,
+        status,
       };
     }
   });
