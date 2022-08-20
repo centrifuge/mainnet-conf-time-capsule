@@ -39,8 +39,8 @@ $ yarn dev
 
 #### API Spec
 
-| Type   | Endpoint                  | Body                                                                                                                        | Response                                                                                              |
-| ------ | ------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `POST` | `/api/mintTimeCapsule`    | <pre>{<br /> twitterHandle: string;<br /> polygonAddress: string;<br /> prediction: string;<br /> svg: string;<br />}</pre> | <pre>{<br /> hash: string;<br /> id: string;<br />}</pre>                                             |
-| `GET`  | `/api/getTimeCapsules`    | `--`                                                                                                                        | <pre>{<br /> id: string;<br /> svgLink: string;<br />}[]</pre>                                        |
-| `GET`  | `/api/getTimeCapsule/:id` | `--`                                                                                                                        | <pre>{<br /> status: 'minted' or 'pending';<br /> svgLink?: string;<br /> hash?: string;<br />}</pre> |
+| Type   | Endpoint                  | Body                                                                                                                        | Response                                                                                            |
+| ------ | ------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `POST` | `/api/mintTimeCapsule`    | <pre>{<br /> twitterHandle: string;<br /> polygonAddress: string;<br /> prediction: string;<br /> svg: string;<br />}</pre> | <pre>{<br /> hash: string;<br /> id: string;<br />}</pre>                                           |
+| `GET`  | `/api/getTimeCapsules`    | `--`                                                                                                                        | <pre>{<br /> id: string;<br /> svgLink: string;<br />}[]</pre>                                      |
+| `GET`  | `/api/getTimeCapsule/:id` | `--`                                                                                                                        | <pre>{<br /> status: 'minted' or 'pending';<br /> svgLink: string;<br /> hash: string;<br />}</pre> |

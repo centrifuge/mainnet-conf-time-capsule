@@ -12,11 +12,20 @@ const Gallery: NextPage = () => {
 
   if (isLoading) {
     return (
-      <Container className={styles['page-loader']}>
-        <div className={styles.loader}>
-          <Loader color="dark" size={48} />
-        </div>
-      </Container>
+      <>
+        <Title
+          align="center"
+          order={isMobile ? 2 : 1}
+          className={styles['gallery-title']}
+        >
+          Time Capsule Gallery
+        </Title>
+        <Container className={styles['page-loader']}>
+          <div className={styles.loader}>
+            <Loader color="dark" size={48} />
+          </div>
+        </Container>
+      </>
     );
   }
 
