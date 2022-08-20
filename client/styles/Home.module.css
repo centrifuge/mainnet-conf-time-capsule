@@ -39,6 +39,45 @@
   }
 }
 
+@media only screen and (max-width: 900px) {
+  .gallery-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 32px;
+    justify-items: center;
+    max-width: 100%;
+    justify-content: center;
+  }
+
+  .gallery-container > div {
+    display: flex;
+  }
+
+  .gallery-title {
+    padding-bottom: 24px;
+  }
+}
+
+@media only screen and (min-width: 901px) {
+  .gallery-container {
+    margin: 0 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+    column-gap: 84px;
+    row-gap: 64px;
+    max-width: 100%;
+    justify-content: center;
+  }
+
+  .gallery-container > div {
+    display: flex;
+  }
+
+  .gallery-title {
+    padding-bottom: 48px;
+  }
+}
+
 @media only screen and (min-width: 601px) {
   .mint-container {
     display: flex;
@@ -74,12 +113,6 @@
   .transaction {
     display: flex;
   }
-}
-
-.gallery-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  column-gap: 32px;
 }
 
 .logo {

@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { Container, Loader } from '@mantine/core';
+import { Container, Loader, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import styles from '../styles/Home.module.css';
 import useGetTimeCapsules from '../hooks/useGetTimeCapsules';
@@ -21,37 +21,34 @@ const Gallery: NextPage = () => {
   }
 
   return (
-    <Container
-      px="16px"
-      style={{ maxWidth: '100%' }}
-      className={styles['gallery-container']}
-    >
-      {isMobile ? (
-        <Container px="24px" mx={0} pt="48px">
-          {data.map(({ id, svgLink }: TimeCapsule) => (
+    <div>
+      <Title
+        align="center"
+        order={isMobile ? 2 : 1}
+        className={styles['gallery-title']}
+      >
+        Time Capsule Gallery
+      </Title>
+      <Container px="16px" className={styles['gallery-container']}>
+        {data.map(({ id, svgLink }: TimeCapsule) => (
+          <div>
             <a
               href={`https://timecapsule.centrifuge.io/capsule/${id}`}
               target="_black"
               className={styles['gallery-item']}
             >
-              <img src={svgLink} alt="time-capsule" width={400} />
+              <div>
+                <img
+                  src={svgLink}
+                  alt="time-capsule"
+                  width={isMobile ? 300 : 400}
+                />
+              </div>
             </a>
-          ))}
-        </Container>
-      ) : (
-        data.map(({ id, svgLink }: TimeCapsule) => (
-          <a
-            href={`https://timecapsule.centrifuge.io/capsule/${id}`}
-            target="_black"
-            className={styles['gallery-item']}
-          >
-            <div>
-              <img src={svgLink} alt="time-capsule" width={400} />
-            </div>
-          </a>
-        ))
-      )}
-    </Container>
+          </div>
+        ))}
+      </Container>
+    </div>
   );
 };
 
