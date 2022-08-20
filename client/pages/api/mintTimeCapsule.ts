@@ -6,6 +6,7 @@ import addToBucket from '../../utilities/db/addToBucket';
 import addToFirestore from '../../utilities/db/addToFirestore';
 import handleMint from '../../utilities/handleMint';
 import getTimeCapsuleFromBucket from '../../utilities/db/getTimeCapsuleFromBucket';
+import generateSVG from '../../utilities/generateSVG';
 
 type Response =
   | {
@@ -27,12 +28,14 @@ export default async function handler(
 
   const uniqueId = Math.ceil(Math.random() * (2 ** 53 - 1)).toString();
 
-  const { polygonAddress, prediction, twitterHandle, svg } = req.body;
+  const { polygonAddress, prediction, twitterHandle } = req.body;
 
   try {
     const tempPath = os.tmpdir();
 
     const { hash } = await handleMint(polygonAddress, uniqueId);
+
+    const svg = generateSVG(prediction, twitterHandle);
 
     const filePath = path.join(tempPath, `${uniqueId}.svg`);
 
@@ -45,8 +48,6 @@ export default async function handler(
     const timeCapsule = {
       id: uniqueId,
       polygonAddress,
-      prediction,
-      twitterHandle,
       svg,
       hash,
       svgLink,

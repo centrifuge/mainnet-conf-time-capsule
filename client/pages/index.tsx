@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Card, Container, Loader, Text } from '@mantine/core';
+import { Card, Container, Loader } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { MintForm } from '../components/MintForm';
 import styles from '../styles/Home.module.css';
@@ -24,7 +24,6 @@ const Home: NextPage = () => {
       <Container className={styles['page-loader']}>
         <div className={styles.loader}>
           <Loader color="dark" size={48} />
-          <Text>Minting...</Text>
         </div>
       </Container>
     );

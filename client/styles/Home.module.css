@@ -17,8 +17,25 @@
     font-size: 20px;
   }
 
-  .time-capsule > img {
+  .time-capsule {
+    font-size: 100px;
+  }
+
+  .time-capsule img {
     width: 300px;
+  }
+
+  .time-capsule-footer {
+    display: grid;
+    width: 300px;
+    grid-template-columns: auto auto;
+  }
+
+  .transaction-info {
+    font-size: 14px;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
   }
 }
 
@@ -37,8 +54,25 @@
     justify-content: flex-end;
   }
 
-  .time-capsule > img {
+  .time-capsule img {
     width: 600px;
+  }
+
+  .time-capsule-footer {
+    display: grid;
+    width: 600px;
+    grid-template-columns: auto auto;
+  }
+
+  .transaction-info {
+    font-size: 16px;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+  }
+
+  .transaction {
+    display: flex;
   }
 }
 
@@ -112,4 +146,17 @@
   background-color: red;
   color: green;
   cursor: pointer;
+}
+
+.share-button {
+  align-self: center;
+}
+
+.minting {
+  display: flex;
+}
+
+.transaction-link {
+  display: flex;
+  justify-content: flex-end;
 }

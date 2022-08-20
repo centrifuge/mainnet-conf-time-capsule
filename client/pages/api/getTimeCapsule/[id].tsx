@@ -28,20 +28,25 @@ export default async function handler(
   try {
     const { nft } = await queryTimeCapsule(query.id);
 
-    if (nft) {
-      const svgLink = await getTimeCapsuleFromBucket(query.id);
+    const svgLink = await getTimeCapsuleFromBucket(query.id);
 
-      if (svgLink) {
+    if (nft) {
+      const metadata = await getTimeCapsuleFromFirestore(query.id);
+
+      if (svgLink && metadata) {
         res.status(200).json({
           status: 'minted',
           svgLink,
+          hash: metadata.hash,
         });
       }
     } else {
       const metadata = await getTimeCapsuleFromFirestore(query.id);
 
       if (metadata) {
-        res.status(200).json({ status: 'pending', hash: metadata.hash });
+        res
+          .status(200)
+          .json({ status: 'pending', hash: metadata.hash, svgLink });
       } else {
         res.status(200).json(false);
       }

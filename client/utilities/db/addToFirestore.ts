@@ -7,8 +7,6 @@ import { TimeCapsule } from '../../types';
 async function addToFirestore({
   id,
   polygonAddress,
-  prediction,
-  twitterHandle,
   svg,
   hash,
   svgLink,
@@ -32,9 +30,7 @@ async function addToFirestore({
 
   await docRef.set({
     polygonAddress,
-    prediction,
     svg,
-    twitterHandle,
     hash,
     svgLink,
   });

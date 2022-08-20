@@ -11,8 +11,6 @@ export type ValidationSchema = typeof validationSchema;
 
 export type TimeCapsule = {
   id: string;
-  twitterHandle: string;
-  prediction: string;
   polygonAddress: string;
   svg: string;
   hash: string;
@@ -23,5 +21,4 @@ export type MintPayload = {
   polygonAddress: string;
   prediction: string;
   twitterHandle: string;
-  svg: string;
 };

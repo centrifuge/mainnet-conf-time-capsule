@@ -2,7 +2,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { Button, Stack, Text, Textarea, TextInput } from '@mantine/core';
-import generateSVG from '../utilities/generateSVG';
 import { Inputs, MintPayload } from '../types';
 import validationSchema from '../utilities/validationSchema';
 import styles from '../styles/Home.module.css';
@@ -22,13 +21,10 @@ export const MintForm = ({ mint }: Props) => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = (inputs: Inputs) => {
-    const svg = generateSVG(inputs.prediction, inputs.twitterHandle);
-
     return mint({
       polygonAddress: inputs.polygonAddress,
       prediction: inputs.prediction,
       twitterHandle: inputs.twitterHandle,
-      svg,
     });
   };
 
