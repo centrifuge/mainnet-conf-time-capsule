@@ -9,8 +9,8 @@ const validationSchema = object().shape({
       return ethers.utils.isAddress(value || '')
         ? true
         : this.createError({
-            message: `Invalid address`,
-            path: 'polygonAddress', // Fieldname
+            message: 'Invalid addres',
+            path: 'polygonAddress',
           });
     }),
   prediction: string()
