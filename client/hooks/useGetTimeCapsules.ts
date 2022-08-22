@@ -12,7 +12,6 @@ const useGetTimeCapsules = () => {
       return data;
     },
     {
-      initialData: [],
       refetchInterval: 15000,
     },
   );
