@@ -2,9 +2,14 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-import { TimeCapsule } from '../../types';
 
-async function getTimeCapsules() {
+type TimeCapsule = {
+  id: string;
+  svgLink: string;
+  timestamp: number;
+};
+
+async function getTimeCapsulesFromFirestore() {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   try {
@@ -25,18 +30,16 @@ async function getTimeCapsules() {
   const timeCapsules: TimeCapsule[] = [];
 
   snapshot.forEach(doc => {
-    const { polygonAddress, svg, hash, svgLink } = doc.data();
+    const { svgLink, timestamp } = doc.data();
 
     timeCapsules.push({
       id: doc.id,
-      polygonAddress,
-      svg,
-      hash,
       svgLink,
+      timestamp,
     });
   });
 
   return timeCapsules;
 }
 
-export default getTimeCapsules;
+export default getTimeCapsulesFromFirestore;

@@ -4,13 +4,18 @@ import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { TimeCapsule } from '../../types';
 
+interface FirestoreEntry extends TimeCapsule {
+  svg: string;
+  hash: string;
+}
+
 async function addToFirestore({
   id,
-  polygonAddress,
   svg,
   hash,
   svgLink,
-}: TimeCapsule) {
+  timestamp,
+}: FirestoreEntry) {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   try {
@@ -29,10 +34,10 @@ async function addToFirestore({
   const docRef = db.collection('predictions').doc(id);
 
   await docRef.set({
-    polygonAddress,
     svg,
     hash,
     svgLink,
+    timestamp,
   });
 }
 

@@ -55,10 +55,10 @@ export default async function handler(
 
       const timeCapsule = {
         id: uniqueId,
-        polygonAddress,
         svg,
         hash,
         svgLink,
+        timestamp: Date.now(),
       };
 
       await addToFirestore(timeCapsule);

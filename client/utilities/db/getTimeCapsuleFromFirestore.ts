@@ -27,14 +27,13 @@ async function getTimeCapsuleFromFirestore(
   let timeCapsule = {};
 
   snapshot.forEach(doc => {
-    const { twitterHandle, prediction, polygonAddress, svg, hash } = doc.data();
+    const { twitterHandle, prediction, svg, hash } = doc.data();
 
     if (doc.id === id) {
       timeCapsule = {
         id: doc.id,
         twitterHandle,
         prediction,
-        polygonAddress,
         svg,
         hash,
       };

@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import getTimeCapsules from '../../utilities/db/getTimeCapsules';
-import queryTimeCapsules from '../../utilities/queries/queryTimeCapsules';
+import getTimeCapsulesFromFirestore from '../../utilities/db/getTimeCapsulesFromFirestore';
 
 type Response = { id: string; svgLink: string }[] | unknown | string;
 
@@ -15,28 +14,9 @@ export default async function handler(
   }
 
   try {
-    const timeCapsulesFromFirestore = await getTimeCapsules();
+    const timeCapsulesFromFirestore = await getTimeCapsulesFromFirestore();
 
-    const timeCapsuleDictionary = timeCapsulesFromFirestore.reduce<{
-      [id: string]: string;
-    }>(
-      (acc, cur) => ({
-        ...acc,
-        [cur.id]: cur.svgLink,
-      }),
-      {},
-    );
-
-    const { nfts } = await queryTimeCapsules();
-
-    const timeCapsules = nfts
-      .map((nft: { id: string; svg: string }) => ({
-        id: nft.id,
-        svgLink: timeCapsuleDictionary[nft.id],
-      }))
-      .filter(({ svgLink }: { svgLink?: string }) => svgLink);
-
-    res.status(200).json(timeCapsules);
+    res.status(200).json(timeCapsulesFromFirestore);
   } catch (error) {
     res.status(500).json(error);
   }

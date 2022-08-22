@@ -11,10 +11,8 @@ export type ValidationSchema = typeof validationSchema;
 
 export type TimeCapsule = {
   id: string;
-  polygonAddress: string;
-  svg: string;
-  hash: string;
   svgLink: string;
+  timestamp: number;
 };
 
 export type MintPayload = {

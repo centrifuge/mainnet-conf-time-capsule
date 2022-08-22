@@ -40,9 +40,9 @@ const Gallery: NextPage = () => {
       </Title>
       <Container px="16px" className={styles['gallery-container']}>
         {data.map(({ id, svgLink }: TimeCapsule) => (
-          <div>
+          <div key={id}>
             <a
-              href={`https://timecapsule.centrifuge.io/capsule/${id}`}
+              href={`/capsule/${id}`}
               target="_black"
               className={styles['gallery-item']}
             >
