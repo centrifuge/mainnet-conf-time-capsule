@@ -75,6 +75,11 @@ contract TimeCapsuleTest is Test {
         assertEq(baseURI, timeCap.baseURI());
     }
 
+    function testTokenURI(string memory baseURI) public {
+        timeCap.setBaseURI(baseURI);
+        assertEq(string.concat(string.concat(baseURI, "1"), ".svg"), timeCap.tokenURI(1));
+    }
+
     function testSetBaseURIUnauthorized(string memory baseURI, address addr1) public {
         vm.assume(addr1 != address(0));
         vm.assume(addr1 != address(this));
