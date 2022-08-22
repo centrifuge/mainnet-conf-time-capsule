@@ -14,8 +14,8 @@ type Response =
       hash: string;
       id: string;
     }
-  | unknown
-  | string;
+  | string
+  | Error;
 
 export default async function handler(
   req: NextApiRequest,
@@ -71,6 +71,10 @@ export default async function handler(
       res.status(200).json('Invalid request');
     }
   } catch (error) {
-    res.status(500).json(error);
+    if (error instanceof Error) {
+      res.status(500).json(error);
+    } else {
+      res.status(500).json('Something went wrong!');
+    }
   }
 }

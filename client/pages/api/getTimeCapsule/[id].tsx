@@ -4,10 +4,10 @@ import getTimeCapsuleFromFirestore from '../../../utilities/db/getTimeCapsuleFro
 import queryTimeCapsule from '../../../utilities/queries/queryTimeCapsule';
 
 type Response =
-  | unknown
-  | string
+  | { status: 'pending' | 'minted'; hash?: string; svgLink?: string }
   | boolean
-  | { status: 'pending' | 'minted'; hash?: string; svgLink?: string };
+  | string
+  | Error;
 
 interface Request extends NextApiRequest {
   query: {
@@ -52,6 +52,10 @@ export default async function handler(
       }
     }
   } catch (error) {
-    res.status(500).json(error);
+    if (error instanceof Error) {
+      res.status(500).json(error);
+    } else {
+      res.status(500).json('Something went wrong!');
+    }
   }
 }
