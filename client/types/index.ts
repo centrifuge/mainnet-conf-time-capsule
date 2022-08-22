@@ -20,3 +20,8 @@ export type MintPayload = {
   prediction: string;
   twitterHandle: string;
 };
+
+export interface FirestoreEntry extends TimeCapsule {
+  svg: string;
+  hash: string;
+}

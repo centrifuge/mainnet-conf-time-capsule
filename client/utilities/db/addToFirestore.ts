@@ -2,12 +2,7 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-import { TimeCapsule } from '../../types';
-
-interface FirestoreEntry extends TimeCapsule {
-  svg: string;
-  hash: string;
-}
+import { FirestoreEntry } from '../../types';
 
 async function addToFirestore({
   id,
