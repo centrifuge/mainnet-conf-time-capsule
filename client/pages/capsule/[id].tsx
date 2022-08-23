@@ -74,6 +74,7 @@ const Gallery: NextPage = () => {
                 title="Check out my 2023 DeFi time capsule sponsored by @centrifuge!"
                 url={data.svgLink}
               >
+                <Text>Share on Twitter</Text>
                 <IconBrandTwitter size={isMobile ? 24 : 32} />
               </TwitterShareButton>
             </div>
@@ -88,7 +89,7 @@ const Gallery: NextPage = () => {
                     <Text align="end">This may take a few minutes.</Text>
                     <Space w={4} />
                     <Text align="end">
-                      Track the{' '}
+                      View{' '}
                       <Text
                         variant="link"
                         component="a"
@@ -108,6 +109,7 @@ const Gallery: NextPage = () => {
                   target="_blank"
                   color="dark"
                 >
+                  <Text>View Transaction</Text>
                   <IconExternalLink size={isMobile ? 24 : 32} />
                 </Anchor>
               )}
@@ -117,22 +119,6 @@ const Gallery: NextPage = () => {
       </Container>
     );
   }
-
-  // if (data?.status === 'minted') {
-  //   return (
-  //     <Container px="0">
-  //       <Container className={styles['time-capsule']}>
-  //         <img src={data.svgLink} alt="time capsule" />
-  //         <TwitterShareButton
-  //           title="Check out my 2023 DeFi time capsule sponsored by @centrifuge!"
-  //           url={data.svgLink}
-  //         >
-  //           <IconBrandTwitter size={isMobile ? 24 : 32} />
-  //         </TwitterShareButton>
-  //       </Container>
-  //     </Container>
-  //   );
-  // }
 
   return (
     <Container className={styles['page-loader']}>

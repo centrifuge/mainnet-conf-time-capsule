@@ -28,7 +28,7 @@
   .time-capsule-footer {
     display: grid;
     width: 300px;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 150px;
   }
 
   .transaction-info {
@@ -36,6 +36,14 @@
     display: flex;
     align-items: flex-end;
     flex-direction: column;
+  }
+
+  .transaction-link {
+    font-size: 12px;
+  }
+
+  .share-button {
+    font-size: 12px;
   }
 }
 
@@ -190,6 +198,7 @@
 }
 
 .transaction-link {
-  display: flex;
+  display: grid;
   justify-content: flex-end;
+  justify-items: center;
 }
