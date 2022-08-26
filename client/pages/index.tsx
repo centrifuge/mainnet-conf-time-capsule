@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Card, Container, Loader } from '@mantine/core';
+import { Card, Container, Loader, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { MintForm } from '../components/MintForm';
 import styles from '../styles/Home.module.css';
@@ -34,10 +34,26 @@ const Home: NextPage = () => {
       <Container size="md" px="0" className={styles['mint-container']}>
         {isMobile ? (
           <Container px="24px" mx={0} pt="48px">
+            <Container pb={32}>
+              <Title order={2} align="center">
+                Centrifuge Time Capsule
+              </Title>
+              <Title order={6} align="center" weight={300}>
+                Turn your 2023 DeFi prediction into a personalized NFT
+              </Title>
+            </Container>
             <MintForm mint={mutate} />
           </Container>
         ) : (
           <Card shadow="md" className={styles['mint-card']}>
+            <Container pb={32}>
+              <Title order={1} align="center">
+                Centrifuge Time Capsule
+              </Title>
+              <Title order={4} align="center" weight={300}>
+                Turn your 2023 DeFi prediction into a personalized NFT
+              </Title>
+            </Container>
             <MintForm mint={mutate} />
           </Card>
         )}

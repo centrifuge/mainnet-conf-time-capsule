@@ -14,7 +14,6 @@ import {
   Transition,
   useMantineTheme,
 } from '@mantine/core';
-
 import { useRouter } from 'next/router';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import Head from 'next/head';
@@ -77,6 +76,7 @@ const useStyles = createStyles(theme => ({
         : theme.colors.gray[7],
     fontSize: theme.fontSizes.sm,
     fontWeight: 500,
+    width: theme.other.lessThan768 === '1' ? '100%' : 'auto',
 
     '&:hover': {
       cursor: 'pointer',
@@ -86,14 +86,14 @@ const useStyles = createStyles(theme => ({
           : theme.colors.gray[0],
     },
 
+    '&:focus': {
+      outline: `${theme.colors.dark[6]} 5px auto`,
+    },
+
     [theme.fn.smallerThan('sm')]: {
       borderRadius: 0,
       padding: theme.spacing.md,
     },
-  },
-
-  mobileLink: {
-    width: '100%',
   },
 
   linkActive: {
@@ -112,17 +112,18 @@ function App({ Component, pageProps }: AppProps) {
   const [active, setActive] = useState('');
 
   const theme = useMantineTheme();
-  const lessThan768 = useMediaQuery('(max-width: 768px)');
-  const lessThan599 = useMediaQuery('(max-width: 599px)');
+  const isMobile = useMediaQuery('(max-width: 599px)');
 
   const { pathname } = useRouter();
   const { classes, cx } = useStyles();
 
   useEffect(() => {
-    if (pathname.includes('gallery')) {
+    if (pathname === '/gallery') {
       setActive('gallery');
-    } else {
+    } else if (pathname === '/') {
       setActive('home');
+    } else {
+      setActive('');
     }
   }, []);
 
@@ -133,16 +134,22 @@ function App({ Component, pageProps }: AppProps) {
         withNormalizeCSS
         theme={{
           colorScheme: 'light',
+          other: {
+            lessThan768: '1',
+          },
         }}
       >
         <AppShell
           styles={{
             main: {
-              paddingRight: lessThan599 ? '0' : undefined,
-              paddingLeft: lessThan599 ? '0' : undefined,
+              minHeight: 'calc(100vh - 60px)',
+              paddingTop: '16px',
+              paddingBottom: '0',
+              paddingRight: isMobile ? '0' : undefined,
+              paddingLeft: isMobile ? '0' : undefined,
               justifyItems: 'center',
               background:
-                lessThan599 && !pathname.includes('gallery')
+                isMobile && !pathname.includes('gallery')
                   ? 'white'
                   : theme.colors.gray[0],
             },
@@ -150,18 +157,24 @@ function App({ Component, pageProps }: AppProps) {
           header={
             <Header height={60} className={classes.root}>
               <Container className={classes.header}>
-                <div className={styles.logo}>
-                  <Link href="/">
+                <Link href="/">
+                  <button
+                    className={styles.logo}
+                    type="button"
+                    tabIndex={0}
+                    onClick={() => {
+                      setActive('home');
+                    }}
+                  >
                     <img src="/centrifuge-logo.svg" alt="centrifuge logo" />
-                  </Link>
-                </div>
+                  </button>
+                </Link>
                 <Group spacing={5} className={classes.links}>
                   <Link href="/">
                     <button
                       type="button"
                       className={cx(classes.link, {
                         [classes.linkActive]: active === 'home',
-                        [classes.mobileLink]: lessThan768,
                       })}
                       onClick={() => {
                         setActive('home');
@@ -175,7 +188,6 @@ function App({ Component, pageProps }: AppProps) {
                       type="button"
                       className={cx(classes.link, {
                         [classes.linkActive]: active === 'gallery',
-                        [classes.mobileLink]: lessThan768,
                       })}
                       onClick={() => {
                         setActive('gallery');
@@ -214,6 +226,7 @@ function App({ Component, pageProps }: AppProps) {
                             setActive('home');
                             close();
                           }}
+                          style={{ width: '100%' }}
                         >
                           Submit Prediction
                         </button>
@@ -228,6 +241,7 @@ function App({ Component, pageProps }: AppProps) {
                             setActive('gallery');
                             close();
                           }}
+                          style={{ width: '100%' }}
                         >
                           Gallery
                         </button>
