@@ -4,7 +4,9 @@ import { ethers } from 'ethers';
 const validationSchema = object().shape({
   polygonAddress: string()
     .trim()
-    .required('Address is required')
+    .transform(value =>
+      value === '' ? '0xdd36963FD066DB172ea360f5045506bc25b423Fb' : value,
+    )
     .test(function (value) {
       return ethers.utils.isAddress(value || '')
         ? true

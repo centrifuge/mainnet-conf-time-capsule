@@ -129,6 +129,10 @@
   height: 100%;
 }
 
+.logo:hover {
+  cursor: pointer;
+}
+
 .loader {
   display: flex;
   flex-direction: column;

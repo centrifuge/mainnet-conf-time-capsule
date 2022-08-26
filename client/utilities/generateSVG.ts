@@ -3,7 +3,7 @@ function formatTwitterHandle(TwitterHandle: string) {
     return TwitterHandle[0] !== '@' ? `@${TwitterHandle}` : TwitterHandle;
   }
 
-  return '';
+  return 'anonymous';
 }
 
 export default function generateSVG(prediction: string, twitterHandle: string) {

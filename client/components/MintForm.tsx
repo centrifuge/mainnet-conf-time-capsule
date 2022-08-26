@@ -33,6 +33,26 @@ export const MintForm = ({ mint }: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles['mint-form']}>
       <Stack spacing={24}>
+        <div>
+          <Textarea
+            className={styles['mint-input']}
+            error={errors.prediction && errors.prediction.message}
+            label="Your 2023 DeFi Prediction"
+            id="prediction"
+            placeholder="In 2023..."
+            withAsterisk
+            {...register('prediction')}
+          />
+
+          <Text
+            size={12}
+            align="end"
+            color={predictionLength > 140 ? 'red' : 'dark'}
+          >
+            {predictionLength}/140
+          </Text>
+        </div>
+
         <TextInput
           spellCheck={false}
           className={styles['mint-input']}
@@ -47,30 +67,12 @@ export const MintForm = ({ mint }: Props) => {
           spellCheck={false}
           className={styles['mint-input']}
           error={errors.twitterHandle && errors.twitterHandle.message}
-          label="Twitter Handle"
+          label="Twitter Handle (leave blank to remain anonymous)"
           id="twitterHandle"
           placeholder="@satoshi_nakamoto"
           {...register('twitterHandle')}
         />
 
-        <div>
-          <Textarea
-            className={styles['mint-input']}
-            error={errors.prediction && errors.prediction.message}
-            label="Your 2023 DeFi Prediction"
-            id="prediction"
-            placeholder="In 2023..."
-            {...register('prediction')}
-          />
-
-          <Text
-            size={12}
-            align="end"
-            color={predictionLength > 140 ? 'red' : 'dark'}
-          >
-            {predictionLength}/140
-          </Text>
-        </div>
         <div className={styles.captcha}>
           <TextInput {...register('captcha')} />
         </div>
