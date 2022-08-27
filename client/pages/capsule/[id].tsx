@@ -71,7 +71,7 @@ const Gallery: NextPage = () => {
           <div className={styles['time-capsule-footer']}>
             <div className={styles['share-button']}>
               <TwitterShareButton
-                title="Check out my 2023 DeFi time capsule sponsored by @centrifuge!"
+                title="Here's my 2023 DeFi prediction. What's yours? https://timecapsule.centrifuge.io #CentrifugeTimeCapsule @Centrifuge"
                 url={data.svgLink}
               >
                 <Text>Share on Twitter</Text>
