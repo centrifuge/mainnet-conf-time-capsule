@@ -125,6 +125,7 @@ function App({ Component, pageProps }: AppProps) {
     } else {
       setActive('');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { Container, Loader, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import { motion, AnimatePresence } from 'framer-motion';
 import styles from '../styles/Home.module.css';
 import useGetTimeCapsules from '../hooks/useGetTimeCapsules';
 import { TimeCapsule } from '../types';
@@ -38,25 +39,33 @@ const Gallery: NextPage = () => {
       >
         Time Capsule Gallery
       </Title>
-      <Container px="16px" className={styles['gallery-container']}>
-        {data.map(({ id, svgLink }: TimeCapsule) => (
-          <div key={id}>
-            <a
-              href={`/capsule/${id}`}
-              target="_black"
-              className={styles['gallery-item']}
+      <AnimatePresence>
+        <Container px="16px" className={styles['gallery-container']}>
+          {data?.map(({ id, svgLink }: TimeCapsule) => (
+            <motion.div
+              key={id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 2 }}
             >
-              <div>
-                <img
-                  src={svgLink}
-                  alt="time-capsule"
-                  width={isMobile ? 300 : 400}
-                />
-              </div>
-            </a>
-          </div>
-        ))}
-      </Container>
+              <a
+                href={`/capsule/${id}`}
+                target="_black"
+                className={styles['gallery-item']}
+              >
+                <div>
+                  <img
+                    src={svgLink}
+                    alt="time-capsule"
+                    width={isMobile ? 300 : 400}
+                  />
+                </div>
+              </a>
+            </motion.div>
+          ))}
+        </Container>
+      </AnimatePresence>
     </div>
   );
 };

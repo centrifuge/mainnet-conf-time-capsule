@@ -16,7 +16,7 @@ import validationSchema from '../utilities/validationSchema';
 import styles from '../styles/Home.module.css';
 
 type Props = {
-  mint: UseMutateFunction<any, unknown, MintPayload, unknown>;
+  mint: UseMutateFunction<unknown, unknown, MintPayload, unknown>;
 };
 
 const InputToolTip = ({ text }: { text: string }) => (
@@ -86,20 +86,6 @@ export const MintForm = ({ mint }: Props) => {
         <TextInput
           spellCheck={false}
           className={styles['mint-input']}
-          error={errors.polygonAddress && errors.polygonAddress.message}
-          label="Polygon Address"
-          id="polygonAddress"
-          placeholder="0x..."
-          style={{ paddingBottom: '16px' }}
-          rightSection={
-            <InputToolTip text="(Optional) - Enter a valid Polygon address to have the NFT sent to your wallet. If left blank, the NFT will mint to 0xdd36963FD066DB172ea360f5045506bc25b423Fb." />
-          }
-          {...register('polygonAddress')}
-        />
-
-        <TextInput
-          spellCheck={false}
-          className={styles['mint-input']}
           error={errors.twitterHandle && errors.twitterHandle.message}
           label="Twitter Handle"
           id="twitterHandle"
@@ -109,6 +95,20 @@ export const MintForm = ({ mint }: Props) => {
             <InputToolTip text="(Optional) - Your Twitter handle will be included in the NFT image. If left blank, 'anonymous' will be displayed on the NFT." />
           }
           {...register('twitterHandle')}
+        />
+
+        <TextInput
+          spellCheck={false}
+          className={styles['mint-input']}
+          error={errors.polygonAddress && errors.polygonAddress.message}
+          label="Polygon Address"
+          id="polygonAddress"
+          placeholder="0x..."
+          style={{ paddingBottom: '16px' }}
+          rightSection={
+            <InputToolTip text="(Optional) - Enter a valid Polygon address to have the NFT sent to your wallet. If left blank, the NFT will mint to 0xdd36963FD066DB172ea360f5045506bc25b423Fb." />
+          }
+          {...register('polygonAddress')}
         />
 
         <div className={styles.captcha}>
