@@ -4,7 +4,12 @@ import getTimeCapsuleFromFirestore from '../../../utilities/db/getTimeCapsuleFro
 import queryTimeCapsule from '../../../utilities/queries/queryTimeCapsule';
 
 type Response =
-  | { status: 'pending' | 'minted'; hash?: string; svgLink?: string }
+  | {
+      status: 'pending' | 'minted';
+      hash: string;
+      svgLink: string;
+      pngLink: string;
+    }
   | boolean
   | string
   | Error;
@@ -28,25 +33,29 @@ export default async function handler(
   try {
     const { nft } = await queryTimeCapsule(query.id);
 
-    const svgLink = await getTimeCapsuleFromBucket(query.id);
+    const imageLinks = await getTimeCapsuleFromBucket(query.id);
 
     if (nft) {
       const metadata = await getTimeCapsuleFromFirestore(query.id);
 
-      if (svgLink && metadata) {
+      if (imageLinks && metadata) {
         res.status(200).json({
           status: 'minted',
-          svgLink,
+          svgLink: imageLinks.svgLink,
+          pngLink: imageLinks.pngLink,
           hash: metadata.hash,
         });
       }
     } else {
       const metadata = await getTimeCapsuleFromFirestore(query.id);
 
-      if (metadata) {
-        res
-          .status(200)
-          .json({ status: 'pending', hash: metadata.hash, svgLink });
+      if (imageLinks && metadata) {
+        res.status(200).json({
+          status: 'pending',
+          hash: metadata.hash,
+          svgLink: imageLinks.svgLink,
+          pngLink: imageLinks.pngLink,
+        });
       } else {
         res.status(200).json(false);
       }

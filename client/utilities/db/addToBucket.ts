@@ -1,6 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 
-async function addToBucket(id: string, svgPath: string) {
+async function addToBucket(svgPath: string) {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   const storage = new Storage({
@@ -11,10 +11,12 @@ async function addToBucket(id: string, svgPath: string) {
     },
   });
 
+  const fileName = svgPath.split('/').pop();
+
   const result = await storage
     .bucket('nft-time-capsule.appspot.com')
     .upload(svgPath, {
-      destination: `${id}.svg`,
+      destination: fileName,
     });
 
   return result;

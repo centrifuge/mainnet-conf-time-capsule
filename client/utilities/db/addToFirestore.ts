@@ -8,6 +8,7 @@ async function addToFirestore({
   id,
   svg,
   hash,
+  pngLink,
   svgLink,
   timestamp,
 }: FirestoreEntry) {
@@ -32,6 +33,7 @@ async function addToFirestore({
     svg,
     hash,
     svgLink,
+    pngLink,
     timestamp,
   });
 }

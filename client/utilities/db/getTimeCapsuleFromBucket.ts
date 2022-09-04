@@ -11,18 +11,25 @@ async function getTimeCapsuleFromBucket(id: string) {
     },
   });
 
-  const result = await storage
+  const svgResult = await storage
     .bucket('nft-time-capsule.appspot.com')
     .file(`${id}.svg`);
 
-  const [doesExists] = await result.exists();
+  const pngResult = await storage
+    .bucket('nft-time-capsule.appspot.com')
+    .file(`${id}.png`);
 
-  if (doesExists) {
-    const [timeCapsule] = await result.getMetadata();
+  const [svgDoesExists] = await svgResult.exists();
+  const [pngDoesExists] = await pngResult.exists();
 
-    const { bucket, name } = timeCapsule;
+  if (svgDoesExists && pngDoesExists) {
+    const [svgTimeCapsule] = await svgResult.getMetadata();
+    const [pngTimeCapsule] = await pngResult.getMetadata();
 
-    return `https://storage.googleapis.com/${bucket}/${name}`;
+    return {
+      svgLink: `https://storage.googleapis.com/${svgTimeCapsule.bucket}/${svgTimeCapsule.name}`,
+      pngLink: `https://storage.googleapis.com/${pngTimeCapsule.bucket}/${pngTimeCapsule.name}`,
+    };
   }
 
   return '';

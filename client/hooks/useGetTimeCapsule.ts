@@ -1,11 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-const useGetTimeCapsule = (id: string) => {
+const useGetTimeCapsule = (config: {
+  id?: string;
+  status?: 'pending' | 'minted';
+  hash?: string;
+  svgLink?: string;
+  pngLink?: string;
+}) => {
   const query = useQuery(
-    ['time-capsule', id],
+    ['time-capsule', config.id],
     async () => {
-      const { data } = await axios.get(`/api/getTimeCapsule/${id}`);
+      const { data } = await axios.get(`/api/getTimeCapsule/${config.id}`);
 
       return data;
     },
@@ -20,7 +26,8 @@ const useGetTimeCapsule = (id: string) => {
           return false;
         return true;
       },
-      enabled: !!id,
+      initialData: config,
+      enabled: !!config.hash,
     },
   );
 

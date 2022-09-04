@@ -30,13 +30,13 @@ export default async function handler(
   try {
     const { nft } = await queryTimeCapsule(query.id);
 
-    const svgLink = await getTimeCapsuleFromBucket(query.id);
+    const imageLinks = await getTimeCapsuleFromBucket(query.id);
 
-    if (nft && svgLink) {
+    if (nft && imageLinks) {
       res.status(200).json({
         name: 'Centrifuge Time Capsule',
         description: 'Your prediction for DeFi in 2023',
-        image: svgLink,
+        image: imageLinks.svgLink,
       });
     } else {
       res.status(200).json('Not found');

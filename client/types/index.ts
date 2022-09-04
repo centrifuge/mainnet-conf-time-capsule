@@ -12,6 +12,7 @@ export type ValidationSchema = typeof validationSchema;
 export type TimeCapsule = {
   id: string;
   svgLink: string;
+  pngLink: string;
   timestamp: number;
 };
 

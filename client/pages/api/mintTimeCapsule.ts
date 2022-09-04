@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
+import sharp from 'mysharp';
 import addToBucket from '../../utilities/db/addToBucket';
 import addToFirestore from '../../utilities/db/addToFirestore';
 import handleMint from '../../utilities/handleMint';
@@ -45,28 +46,40 @@ export default async function handler(
 
       const svg = generateSVG(prediction, twitterHandle);
 
-      const filePath = path.join(tempPath, `${uniqueId}.svg`);
+      const svgFilePath = path.join(tempPath, `${uniqueId}.svg`);
 
-      await fs.writeFile(filePath, svg);
+      await fs.writeFile(svgFilePath, svg);
 
-      await addToBucket(uniqueId, filePath);
+      const png = await sharp(svgFilePath).png().toBuffer();
 
-      const svgLink = await getTimeCapsuleFromBucket(uniqueId);
+      const pngFilePath = path.join(tempPath, `${uniqueId}.png`);
 
-      const timeCapsule = {
-        id: uniqueId,
-        svg,
-        hash,
-        svgLink,
-        timestamp: Date.now(),
-      };
+      await fs.writeFile(pngFilePath, png);
 
-      await addToFirestore(timeCapsule);
+      await addToBucket(svgFilePath);
+      await addToBucket(pngFilePath);
 
-      res.status(200).json({
-        hash,
-        id: uniqueId,
-      });
+      const imageLinks = await getTimeCapsuleFromBucket(uniqueId);
+
+      if (imageLinks) {
+        const timeCapsule = {
+          id: uniqueId,
+          svg,
+          hash,
+          svgLink: imageLinks.svgLink,
+          pngLink: imageLinks.pngLink,
+          timestamp: Date.now(),
+        };
+
+        await addToFirestore(timeCapsule);
+
+        res.status(200).json({
+          hash,
+          id: uniqueId,
+        });
+      } else {
+        res.status(500).json('Something went wrong!');
+      }
     } else {
       res.status(200).json('Invalid request');
     }
