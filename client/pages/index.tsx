@@ -45,7 +45,7 @@ const Home: NextPage = () => {
             <MintForm mint={mutate} />
           </Container>
         ) : (
-          <Card shadow="md" className={styles['mint-card']}>
+          <Card shadow="md" className={styles['mint-card']} py={42} px={48}>
             <Container pb={32}>
               <Title order={1} align="center">
                 Centrifuge Time Capsule
