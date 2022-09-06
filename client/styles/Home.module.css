@@ -72,7 +72,7 @@
   .gallery-container {
     margin: 0 30px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+    grid-template-columns: repeat(3, minmax(400px, 400px));
     column-gap: 84px;
     row-gap: 64px;
     max-width: 100%;

@@ -44,7 +44,7 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
     [],
   );
 
-  if (!status) {
+  if (!data.status) {
     return (
       <Container className={styles['page-loader']}>
         <div className={styles.loader}>
@@ -83,7 +83,7 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
                 </TwitterShareButton>
               </div>
               <div>
-                {status === 'pending' ? (
+                {data.status === 'pending' ? (
                   <div className={styles['transaction-info']}>
                     <div className={styles.minting}>
                       <Loader color="dark" size={24} />
