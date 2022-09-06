@@ -1,29 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { TimeCapsule } from '../types';
+import shuffle from 'lodash/shuffle';
 
-const useGetTimeCapsules = () => {
+const useGetShowcase = () => {
   const query = useQuery(
     ['time-capsules'],
     async () => {
       const { data } = await axios.get('/api/getTimeCapsules');
 
       if (data.length) {
-        data.sort(
-          (a: TimeCapsule, b: TimeCapsule) => b.timestamp - a.timestamp,
-        );
-
-        return data;
+        return shuffle(data).slice(0, 9);
       }
 
       return [];
     },
     {
-      refetchInterval: 15000,
+      refetchInterval: 60 * 1000,
+      refetchOnWindowFocus: false,
     },
   );
 
   return query;
 };
 
-export default useGetTimeCapsules;
+export default useGetShowcase;

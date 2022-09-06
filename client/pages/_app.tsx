@@ -125,8 +125,7 @@ function App({ Component, pageProps }: AppProps) {
     } else {
       setActive('');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -181,7 +180,7 @@ function App({ Component, pageProps }: AppProps) {
                         setActive('home');
                       }}
                     >
-                      Submit Prediction
+                      Submit New Prediction
                     </button>
                   </Link>
                   <Link href="/gallery">

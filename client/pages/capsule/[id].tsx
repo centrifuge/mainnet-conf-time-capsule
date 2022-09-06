@@ -74,9 +74,8 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
             <div className={styles['time-capsule-footer']}>
               <div className={styles['share-button']}>
                 <TwitterShareButton
-                  title="@Centrifuge"
+                  title={`Here's my 2023 DeFi Prediction. What's yours? https://timecapsule.centrifuge.io #CentrifugeTimeCapsule @centrifuge`}
                   url={`https://timecapsule.centrifuge.io/capsule/${query.id}`}
-                  hashtags={['CentrifugeTimeCapsule']}
                 >
                   <Text>Share on Twitter</Text>
                   <IconBrandTwitter size={isMobile ? 24 : 32} />

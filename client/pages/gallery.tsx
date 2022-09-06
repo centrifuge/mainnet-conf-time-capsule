@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import { Container, Loader, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { motion, AnimatePresence } from 'framer-motion';
 import styles from '../styles/Home.module.css';
 import useGetTimeCapsules from '../hooks/useGetTimeCapsules';
 import { TimeCapsule } from '../types';
@@ -37,35 +36,27 @@ const Gallery: NextPage = () => {
         order={isMobile ? 2 : 1}
         className={styles['gallery-title']}
       >
-        Time Capsule Gallery
+        Centrifuge Time Capsule Gallery
       </Title>
-      <AnimatePresence>
-        <Container px="16px" className={styles['gallery-container']}>
-          {data?.map(({ id, svgLink }: TimeCapsule) => (
-            <motion.div
-              key={id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 2 }}
+      <Container px="16px" className={styles['gallery-container']}>
+        {data?.map(({ id, svgLink }: TimeCapsule) => (
+          <div key={id}>
+            <a
+              href={`/capsule/${id}`}
+              target="_black"
+              className={styles['gallery-item']}
             >
-              <a
-                href={`/capsule/${id}`}
-                target="_black"
-                className={styles['gallery-item']}
-              >
-                <div>
-                  <img
-                    src={svgLink}
-                    alt="time-capsule"
-                    width={isMobile ? 300 : 400}
-                  />
-                </div>
-              </a>
-            </motion.div>
-          ))}
-        </Container>
-      </AnimatePresence>
+              <div>
+                <img
+                  src={svgLink}
+                  alt="time-capsule"
+                  width={isMobile ? 300 : 400}
+                />
+              </div>
+            </a>
+          </div>
+        ))}
+      </Container>
     </div>
   );
 };
