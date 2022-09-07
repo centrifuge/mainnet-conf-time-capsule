@@ -2,11 +2,11 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-import { FirestoreEntry } from '../../types';
+import { Status } from '../../types';
 
 async function getTimeCapsuleFromFirestore(
   id: string,
-): Promise<FirestoreEntry | false> {
+): Promise<{ status: Status; hash: string } | false> {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   try {
@@ -27,21 +27,18 @@ async function getTimeCapsuleFromFirestore(
   let timeCapsule = {};
 
   snapshot.forEach(doc => {
-    const { twitterHandle, prediction, svg, hash } = doc.data();
+    const { hash, status } = doc.data();
 
     if (doc.id === id) {
       timeCapsule = {
-        id: doc.id,
-        twitterHandle,
-        prediction,
-        svg,
         hash,
+        status,
       };
     }
   });
 
   if (Object.keys(timeCapsule).length) {
-    return timeCapsule as FirestoreEntry;
+    return timeCapsule as { status: Status; hash: string };
   }
 
   return false;

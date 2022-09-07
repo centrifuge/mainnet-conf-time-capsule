@@ -1,6 +1,9 @@
 import axios from 'axios';
-import { ethers, BigNumber } from 'ethers';
+import { ethers } from 'ethers';
+import { config } from 'dotenv';
 import abi from './abi.json';
+
+config();
 
 async function handleMint(polygonAddress: string, uniqueId: string) {
   const {
@@ -35,12 +38,9 @@ async function handleMint(polygonAddress: string, uniqueId: string) {
 
   const timeCapsuleNftContract = new ethers.Contract(address, abi, signer);
 
-  const nonce = BigNumber.from(await signer.getTransactionCount('latest'));
-
   return timeCapsuleNftContract.mint(polygonAddress, uniqueId, {
     maxFeePerGas,
     maxPriorityFeePerGas,
-    nonce,
   });
 }
 

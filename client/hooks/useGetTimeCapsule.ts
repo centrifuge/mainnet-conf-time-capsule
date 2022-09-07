@@ -1,16 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { Status } from '../types';
 
 const useGetTimeCapsule = (config: {
-  id?: string;
-  status?: 'pending' | 'minted';
-  hash?: string;
-  svgLink?: string;
-  pngLink?: string;
+  id: string;
+  status: Status;
+  hash: string;
+  svgLink: string;
+  pngLink: string;
 }) => {
   const query = useQuery(
     ['time-capsule', config.id],
     async () => {
+      if (config.status === 'not found') {
+        return { status: 'not found' };
+      }
+
       const { data } = await axios.get(`/api/getTimeCapsule/${config.id}`);
 
       return data;

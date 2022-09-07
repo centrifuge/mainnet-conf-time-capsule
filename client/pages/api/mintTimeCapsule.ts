@@ -5,18 +5,12 @@ import os from 'os';
 import sharp from 'mysharp';
 import addToBucket from '../../utilities/db/addToBucket';
 import addToFirestore from '../../utilities/db/addToFirestore';
-import handleMint from '../../utilities/handleMint';
 import getTimeCapsuleFromBucket from '../../utilities/db/getTimeCapsuleFromBucket';
 import generateSVG from '../../utilities/generateSVG';
 import validationSchema from '../../utilities/validationSchema';
+import { FirestoreEntry } from '../../types';
 
-type Response =
-  | {
-      hash: string;
-      id: string;
-    }
-  | string
-  | Error;
+type Response = { id: string } | string | Error;
 
 export default async function handler(
   req: NextApiRequest,
@@ -42,8 +36,6 @@ export default async function handler(
     if (isValid) {
       const tempPath = os.tmpdir();
 
-      const { hash } = await handleMint(polygonAddress, uniqueId);
-
       const svg = generateSVG(prediction, twitterHandle);
 
       const svgFilePath = path.join(tempPath, `${uniqueId}.svg`);
@@ -62,10 +54,12 @@ export default async function handler(
       const imageLinks = await getTimeCapsuleFromBucket(uniqueId);
 
       if (imageLinks) {
-        const timeCapsule = {
+        const timeCapsule: FirestoreEntry = {
           id: uniqueId,
+          polygonAddress,
           svg,
-          hash,
+          hash: 'queued',
+          status: 'queued',
           svgLink: imageLinks.svgLink,
           pngLink: imageLinks.pngLink,
           timestamp: Date.now(),
@@ -74,7 +68,6 @@ export default async function handler(
         await addToFirestore(timeCapsule);
 
         res.status(200).json({
-          hash,
           id: uniqueId,
         });
       } else {

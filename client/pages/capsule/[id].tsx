@@ -10,7 +10,7 @@ import styles from '../../styles/Home.module.css';
 import useGetTimeCapsule from '../../hooks/useGetTimeCapsule';
 import getTimeCapsuleFromBucket from '../../utilities/db/getTimeCapsuleFromBucket';
 import getTimeCapsuleFromFirestore from '../../utilities/db/getTimeCapsuleFromFirestore';
-import queryTimeCapsule from '../../utilities/queries/queryTimeCapsule';
+import { Status } from '../../types';
 
 const { NETWORK } = process.env;
 
@@ -18,7 +18,7 @@ type Props =
   | {
       pngLink: string;
       hash: string;
-      status: 'pending' | 'minted';
+      status: Status;
       svgLink: string;
     }
   | Record<string, never>;
@@ -36,6 +36,8 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
     svgLink,
   });
 
+  console.log(data.status);
+
   const explorerUrl = useMemo(
     () =>
       NETWORK === 'mainnet'
@@ -44,7 +46,7 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
     [],
   );
 
-  if (!data.status) {
+  if (data.status === 'not found') {
     return (
       <Container className={styles['page-loader']}>
         <div className={styles.loader}>
@@ -54,7 +56,11 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
     );
   }
 
-  if (data.status === 'pending' || data.status === 'minted') {
+  if (
+    data.status === 'queued' ||
+    data.status === 'pending' ||
+    data.status === 'minted'
+  ) {
     return (
       <>
         <Head>
@@ -82,7 +88,7 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
                 </TwitterShareButton>
               </div>
               <div>
-                {data.status === 'pending' ? (
+                {(data.status === 'pending' || data.status === 'queued') && (
                   <div className={styles['transaction-info']}>
                     <div className={styles.minting}>
                       <Loader color="dark" size={24} />
@@ -90,22 +96,27 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
                     </div>
                     <div className={styles.transaction}>
                       <Text align="end">This may take a few minutes.</Text>
-                      <Space w={4} />
-                      <Text align="end">
-                        View{' '}
-                        <Text
-                          variant="link"
-                          component="a"
-                          href={`${explorerUrl}/tx/${data.hash}`}
-                          target="_blank"
-                        >
-                          transaction
-                        </Text>
-                        .
-                      </Text>
+                      {data.status === 'pending' && (
+                        <>
+                          <Space w={4} />
+                          <Text align="end">
+                            View{' '}
+                            <Text
+                              variant="link"
+                              component="a"
+                              href={`${explorerUrl}/tx/${data.hash}`}
+                              target="_blank"
+                            >
+                              transaction
+                            </Text>
+                            .
+                          </Text>
+                        </>
+                      )}
                     </div>
                   </div>
-                ) : (
+                )}
+                {data.status === 'minted' && (
                   <Anchor
                     className={styles['transaction-link']}
                     href={`${explorerUrl}/tx/${data.hash}`}
@@ -134,29 +145,16 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
 };
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { nft } = await queryTimeCapsule(context.query.id as string);
-
   const imageLinks = await getTimeCapsuleFromBucket(context.query.id as string);
 
   const metadata = await getTimeCapsuleFromFirestore(
     context.query.id as string,
   );
 
-  if (nft && imageLinks && metadata) {
-    return {
-      props: {
-        status: 'minted',
-        svgLink: imageLinks.svgLink,
-        pngLink: imageLinks.pngLink,
-        hash: metadata.hash,
-      },
-    };
-  }
-
   if (imageLinks && metadata) {
     return {
       props: {
-        status: 'pending',
+        status: metadata.status,
         hash: metadata.hash,
         svgLink: imageLinks.svgLink,
         pngLink: imageLinks.pngLink,
@@ -164,7 +162,7 @@ export async function getServerSideProps(context: NextPageContext) {
     };
   }
 
-  return { props: {} };
+  return { props: { status: 'not found' } };
 }
 
 export default Capsule;

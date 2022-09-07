@@ -1,10 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { TimeCapsule } from '../../types';
 import getTimeCapsulesFromFirestore from '../../utilities/db/getTimeCapsulesFromFirestore';
 
-type Response =
-  | { id: string; svgLink: string; timestamp: number }[]
-  | string
-  | Error;
+type Response = TimeCapsule[] | string | Error;
 
 export default async function handler(
   req: NextApiRequest,

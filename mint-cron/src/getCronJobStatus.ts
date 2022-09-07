@@ -1,19 +1,12 @@
+import { config } from 'dotenv';
 // eslint-disable-next-line import/no-unresolved
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-import { FirestoreEntry } from '../../types';
 
-async function addToFirestore({
-  id,
-  svg,
-  hash,
-  polygonAddress,
-  status,
-  pngLink,
-  svgLink,
-  timestamp,
-}: FirestoreEntry) {
+config();
+
+const getCronJobStatus = async () => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   try {
@@ -29,17 +22,9 @@ async function addToFirestore({
 
   const db = getFirestore();
 
-  const docRef = db.collection('predictions').doc(id);
+  const doc = await db.collection('cron-job').doc('status').get();
 
-  await docRef.set({
-    svg,
-    hash,
-    polygonAddress,
-    status,
-    svgLink,
-    pngLink,
-    timestamp,
-  });
-}
+  return doc.data()?.isRunning;
+};
 
-export default addToFirestore;
+export default getCronJobStatus;

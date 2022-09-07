@@ -1,0 +1,43 @@
+{
+  "name": "mainnet-conf-time-capsule",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess 'node --es-module-specifier-resolution=node ./dist/index'",
+    "lint": "eslint 'src/**'",
+    "start": "node --experimental-modules --es-module-specifier-resolution=node ./dist/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/centrifuge/mainnet-conf-time-capsule.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/centrifuge/mainnet-conf-time-capsule/issues"
+  },
+  "homepage": "https://github.com/centrifuge/mainnet-conf-time-capsule#readme",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.1.2",
+    "@types/node": "^18.7.15",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.2",
+    "eslint": "^8.23.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "ethers": "^5.7.0",
+    "firebase-admin": "^11.0.1",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
+    "tsc-watch": "^5.0.3",
+    "typescript": "^4.8.2"
+  }
+}

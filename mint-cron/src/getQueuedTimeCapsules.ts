@@ -1,19 +1,12 @@
+import { config } from 'dotenv';
 // eslint-disable-next-line import/no-unresolved
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-import { FirestoreEntry } from '../../types';
 
-async function addToFirestore({
-  id,
-  svg,
-  hash,
-  polygonAddress,
-  status,
-  pngLink,
-  svgLink,
-  timestamp,
-}: FirestoreEntry) {
+config();
+
+async function getQueuedTimeCapsules() {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   try {
@@ -29,17 +22,19 @@ async function addToFirestore({
 
   const db = getFirestore();
 
-  const docRef = db.collection('predictions').doc(id);
+  const snapshot = await db.collection('predictions').get();
 
-  await docRef.set({
-    svg,
-    hash,
-    polygonAddress,
-    status,
-    svgLink,
-    pngLink,
-    timestamp,
+  const timeCapsules: { polygonAddress: string; id: string }[] = [];
+
+  snapshot.forEach(doc => {
+    const { polygonAddress, status } = doc.data();
+
+    if (status === 'queued' || status === 'failed') {
+      timeCapsules.push({ polygonAddress, id: doc.id });
+    }
   });
+
+  return timeCapsules;
 }
 
-export default addToFirestore;
+export default getQueuedTimeCapsules;

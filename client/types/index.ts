@@ -1,5 +1,7 @@
 import validationSchema from '../utilities/validationSchema';
 
+export type Status = 'queued' | 'pending' | 'minted' | 'failed' | 'not found';
+
 export type Inputs = {
   polygonAddress: string;
   prediction: string;
@@ -12,8 +14,8 @@ export type ValidationSchema = typeof validationSchema;
 export type TimeCapsule = {
   id: string;
   svgLink: string;
-  pngLink: string;
   timestamp: number;
+  status: Status;
 };
 
 export type MintPayload = {
@@ -23,6 +25,8 @@ export type MintPayload = {
 };
 
 export interface FirestoreEntry extends TimeCapsule {
+  polygonAddress: string;
   svg: string;
   hash: string;
+  pngLink: string;
 }

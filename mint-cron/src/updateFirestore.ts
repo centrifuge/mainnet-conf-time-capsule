@@ -1,19 +1,16 @@
+import { config } from 'dotenv';
 // eslint-disable-next-line import/no-unresolved
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-import { FirestoreEntry } from '../../types';
 
-async function addToFirestore({
-  id,
-  svg,
-  hash,
-  polygonAddress,
-  status,
-  pngLink,
-  svgLink,
-  timestamp,
-}: FirestoreEntry) {
+config();
+
+async function updateFirestore(
+  id: string,
+  status: number | null,
+  hash?: string,
+) {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   try {
@@ -29,17 +26,19 @@ async function addToFirestore({
 
   const db = getFirestore();
 
-  const docRef = db.collection('predictions').doc(id);
+  const timeCapsuleRef = await db.collection('predictions').doc(id);
 
-  await docRef.set({
-    svg,
-    hash,
-    polygonAddress,
-    status,
-    svgLink,
-    pngLink,
-    timestamp,
-  });
+  if (status === 0) {
+    return timeCapsuleRef.update({ status: 'failed' });
+  }
+
+  if (status === 1) {
+    return timeCapsuleRef.update({ status: 'minted' });
+  }
+
+  if (status === null) {
+    return timeCapsuleRef.update({ status: 'pending', hash });
+  }
 }
 
-export default addToFirestore;
+export default updateFirestore;
