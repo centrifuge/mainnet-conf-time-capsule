@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess 'node --es-module-specifier-resolution=node ./dist/index'",

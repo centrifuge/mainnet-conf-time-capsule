@@ -1,4 +1,4 @@
-import { Request, Response } from '@google-cloud/functions-framework';
+import { HttpFunction } from '@google-cloud/functions-framework';
 import getCronJobStatus from './getCronJobStatus';
 import getQueuedTimeCapsules from './getQueuedTimeCapsules';
 import handleMint from './handleMint';
@@ -6,10 +6,7 @@ import toggleCronJobStatus from './toggleCronJobStatus';
 import updateFirestore from './updateFirestore';
 
 /* eslint-disable no-await-in-loop */
-export const mintTimeCapsules = async (
-  request: Request,
-  response: Response,
-) => {
+export const mintTimeCapsules: HttpFunction = async (request, response) => {
   console.log('Running!');
 
   try {
@@ -40,6 +37,8 @@ export const mintTimeCapsules = async (
 
     response.send('Success').sendStatus(200);
   } catch (error) {
+    await toggleCronJobStatus(false);
     console.log('Error:', error);
+    response.send('Error').sendStatus(200);
   }
 };
