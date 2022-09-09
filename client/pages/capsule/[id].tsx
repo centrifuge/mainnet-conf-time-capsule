@@ -36,8 +36,6 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
     svgLink,
   });
 
-  console.log(data.status);
-
   const explorerUrl = useMemo(
     () =>
       NETWORK === 'mainnet'
