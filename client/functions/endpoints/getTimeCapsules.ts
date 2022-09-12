@@ -1,6 +1,6 @@
 import { Handler } from '@netlify/functions';
-import { getTimeCapsulesFromFirestore } from '../db-helpers/getTimeCapsulesFromFirestore';
-import { getTimeCapsulesFromBucket } from '../db-helpers/getTimeCapsulesFromBucket';
+import { getTimeCapsulesFromFirestore } from '../helpers/getTimeCapsulesFromFirestore';
+import { getTimeCapsulesFromBucket } from '../helpers/getTimeCapsulesFromBucket';
 
 const handler: Handler = async event => {
   const { httpMethod } = event;

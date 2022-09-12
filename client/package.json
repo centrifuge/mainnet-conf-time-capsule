@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "serve:functions": "netlify-lambda serve --config ./webpack.functions.js functions"
+    "serve:functions": "netlify-lambda serve --config ./webpack.functions.js ./functions/endpoints",
+    "build:functions": "netlify-lambda build --config ./webpack.functions.js ./functions/endpoints"
   },
   "dependencies": {
     "@babel/preset-typescript": "^7.18.6",

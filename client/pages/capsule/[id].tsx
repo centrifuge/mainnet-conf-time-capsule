@@ -8,8 +8,8 @@ import { IconBrandTwitter, IconExternalLink } from '@tabler/icons';
 import { TwitterShareButton } from 'react-share';
 import styles from '../../styles/Home.module.css';
 import { useGetTimeCapsule } from '../../hooks/useGetTimeCapsule';
-import { getTimeCapsuleFromBucket } from '../../functions/db-helpers/getTimeCapsuleFromBucket';
-import { getTimeCapsuleFromFirestore } from '../../functions/db-helpers/getTimeCapsuleFromFirestore';
+import { getTimeCapsuleFromBucket } from '../../functions/helpers/getTimeCapsuleFromBucket';
+import { getTimeCapsuleFromFirestore } from '../../functions/helpers/getTimeCapsuleFromFirestore';
 import { Status } from '../../types';
 
 const { NETWORK } = process.env;

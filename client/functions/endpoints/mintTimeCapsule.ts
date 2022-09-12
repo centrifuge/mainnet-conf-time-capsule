@@ -2,58 +2,13 @@ import { Handler } from '@netlify/functions';
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
-import { Storage } from '@google-cloud/storage';
-import { config } from 'dotenv';
-import chromium from 'chrome-aws-lambda';
-import { addToFirestore } from '../db-helpers/addToFirestore';
-import { getTimeCapsuleFromBucket } from '../db-helpers/getTimeCapsuleFromBucket';
-import { generateSVG } from '../../utilities/generateSVG';
+import { addToFirestore } from '../helpers/addToFirestore';
+import { getTimeCapsuleFromBucket } from '../helpers/getTimeCapsuleFromBucket';
+import { generateSVG } from '../helpers/generateSVG';
 import { validationSchema } from '../../utilities/validationSchema';
 import { FirestoreEntry } from '../../types';
-
-config();
-
-const addImagesToBucket = async (tempPath: string, uniqueId: string) => {
-  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
-
-  const storage = new Storage({
-    projectId: GCP_PROJECT_ID,
-    credentials: {
-      private_key: GCP_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      client_email: GCP_CLIENT_EMAIL,
-    },
-  });
-
-  const pngFilePath = path.join(tempPath, `${uniqueId}.png`);
-  const svgFilePath = path.join(tempPath, `${uniqueId}.svg`);
-
-  await storage.bucket('nft-time-capsule.appspot.com').upload(pngFilePath, {
-    destination: `${uniqueId}.png`,
-  });
-
-  await storage.bucket('nft-time-capsule.appspot.com').upload(svgFilePath, {
-    destination: `${uniqueId}.svg`,
-  });
-};
-
-const generatePNG = async (pngFilePath: string, svg: string) => {
-  const { CHROMIUM_PATH } = process.env;
-
-  const browser = await chromium.puppeteer.launch({
-    args: await chromium.args,
-    executablePath: CHROMIUM_PATH || (await chromium.executablePath),
-    headless: true,
-    ignoreHTTPSErrors: true,
-  });
-
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1600, height: 900 });
-  await page.setContent(svg);
-
-  await page.screenshot({ path: pngFilePath });
-
-  await browser.close();
-};
+import { generatePNG } from '../helpers/generatePNG';
+import { addImagesToBucket } from '../helpers/addImagestoBucket';
 
 const handler: Handler = async event => {
   const { httpMethod } = event;
