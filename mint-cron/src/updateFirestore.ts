@@ -11,7 +11,11 @@ async function updateFirestore(
   status: number | null,
   hash?: string,
 ) {
-  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
+  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID, NETWORK } =
+    process.env;
+
+  const bucketName =
+    NETWORK === 'mainnet' ? 'time-capsules' : 'time-capsules-testnet';
 
   try {
     initializeApp({
@@ -26,7 +30,7 @@ async function updateFirestore(
 
   const db = getFirestore();
 
-  const timeCapsuleRef = await db.collection('predictions').doc(id);
+  const timeCapsuleRef = await db.collection(bucketName).doc(id);
 
   if (status === 0) {
     return timeCapsuleRef.update({ status: 'failed' });

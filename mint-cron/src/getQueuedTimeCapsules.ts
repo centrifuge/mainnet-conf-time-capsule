@@ -7,7 +7,11 @@ import { getFirestore } from 'firebase-admin/firestore';
 config();
 
 async function getQueuedTimeCapsules() {
-  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
+  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID, NETWORK } =
+    process.env;
+
+  const bucketName =
+    NETWORK === 'mainnet' ? 'time-capsules' : 'time-capsules-testnet';
 
   try {
     initializeApp({
@@ -22,7 +26,7 @@ async function getQueuedTimeCapsules() {
 
   const db = getFirestore();
 
-  const snapshot = await db.collection('predictions').get();
+  const snapshot = await db.collection(bucketName).get();
 
   const timeCapsules: {
     polygonAddress: string;
