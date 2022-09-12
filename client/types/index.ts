@@ -1,6 +1,6 @@
 import { validationSchema } from '../utilities/validationSchema';
 
-export type Status = 'queued' | 'pending' | 'minted' | 'failed' | 'not found';
+export type Status = 'failed' | 'minted' | 'not found' | 'pending' | 'queued';
 
 export type Inputs = {
   polygonAddress: string;
