@@ -1,6 +1,6 @@
 import { object, string } from 'yup';
 import { ethers } from 'ethers';
-import { containsProfanity } from './profanity';
+import { isProfane } from './isProfane';
 
 const validationSchema = object().shape({
   polygonAddress: string()
@@ -21,7 +21,7 @@ const validationSchema = object().shape({
     .max(140, 'Prediction is too long')
     .required('Prediction is required')
     .test(function (prediction) {
-      if (containsProfanity(prediction as string)) {
+      if (isProfane(prediction as string)) {
         return this.createError({
           message: 'Please refrain from using profanity or hate speech.',
           path: 'prediction',

@@ -1,4 +1,4 @@
-const words = [
+const profaneWords = [
   'anal',
   'analingus',
   'anus',
@@ -417,8 +417,8 @@ const words = [
   '🖕',
 ];
 
-const containsProfanity = (prediction: string) =>
-  words.some(word => {
+const isProfane = (prediction: string) =>
+  profaneWords.some(word => {
     const profanityRegEx = new RegExp(`\\b${word}\\b`);
 
     if (profanityRegEx.test(prediction)) {
@@ -428,4 +428,4 @@ const containsProfanity = (prediction: string) =>
     return false;
   });
 
-export { containsProfanity };
+export { isProfane };
