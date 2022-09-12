@@ -13,7 +13,7 @@ import { FirestoreEntry } from '../types';
 
 config();
 
-async function addToBucket(svgPath: string) {
+async function addImagesToBucket(tempPath: string, uniqueId: string) {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   const storage = new Storage({
@@ -24,15 +24,35 @@ async function addToBucket(svgPath: string) {
     },
   });
 
-  const fileName = svgPath.split('/').pop();
+  const pngFilePath = path.join(tempPath, `${uniqueId}.png`);
+  const svgFilePath = path.join(tempPath, `${uniqueId}.svg`);
 
-  const result = await storage
-    .bucket('nft-time-capsule.appspot.com')
-    .upload(svgPath, {
-      destination: fileName,
-    });
+  await storage.bucket('nft-time-capsule.appspot.com').upload(pngFilePath, {
+    destination: `${uniqueId}.png`,
+  });
 
-  return result;
+  await storage.bucket('nft-time-capsule.appspot.com').upload(svgFilePath, {
+    destination: `${uniqueId}.svg`,
+  });
+}
+
+async function generatePNG(pngFilePath: string, svg: string) {
+  const { CHROMIUM_PATH } = process.env;
+
+  const browser = await chromium.puppeteer.launch({
+    args: await chromium.args,
+    executablePath: CHROMIUM_PATH || (await chromium.executablePath),
+    headless: true,
+    ignoreHTTPSErrors: true,
+  });
+
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1600, height: 900 });
+  await page.setContent(svg);
+
+  await page.screenshot({ path: pngFilePath });
+
+  await browser.close();
 }
 
 const handler: Handler = async event => {
@@ -59,31 +79,16 @@ const handler: Handler = async event => {
     });
 
     if (isValid) {
-      const browser = await chromium.puppeteer.launch({
-        args: await chromium.args,
-        executablePath:
-          // '/usr/local/bin/chromium' ||
-          await chromium.executablePath,
-        headless: true,
-        ignoreHTTPSErrors: true,
-      });
-
-      const page = await browser.newPage();
-      await page.setViewport({ width: 1600, height: 900 });
-      const svg = generateSVG(prediction, twitterHandle);
-      await page.setContent(svg);
-
       const tempPath = os.tmpdir();
-      const pngFilePath = path.join(tempPath, `${uniqueId}.png`);
-      await page.screenshot({ path: pngFilePath });
-
-      await browser.close();
 
       const svgFilePath = path.join(tempPath, `${uniqueId}.svg`);
+      const svg = generateSVG(prediction, twitterHandle);
       await fs.writeFile(svgFilePath, svg);
 
-      await addToBucket(svgFilePath);
-      await addToBucket(pngFilePath);
+      const pngFilePath = path.join(tempPath, `${uniqueId}.png`);
+      await generatePNG(pngFilePath, svg);
+
+      await addImagesToBucket(tempPath, uniqueId);
 
       const imageLinks = await getTimeCapsuleFromBucket(uniqueId);
 
@@ -118,7 +123,6 @@ const handler: Handler = async event => {
       body: JSON.stringify('Invalid request'),
     };
   } catch (error) {
-    console.log(error);
     if (error instanceof Error) {
       return {
         statusCode: 500,
