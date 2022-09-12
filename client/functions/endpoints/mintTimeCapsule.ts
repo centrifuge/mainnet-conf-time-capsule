@@ -5,11 +5,11 @@ import os from 'os';
 import { Storage } from '@google-cloud/storage';
 import { config } from 'dotenv';
 import chromium from 'chrome-aws-lambda';
-import { addToFirestore } from '../utilities/db/addToFirestore';
-import { getTimeCapsuleFromBucket } from '../utilities/db/getTimeCapsuleFromBucket';
-import { generateSVG } from '../utilities/generateSVG';
-import { validationSchema } from '../utilities/validationSchema';
-import { FirestoreEntry } from '../types';
+import { addToFirestore } from '../db-helpers/addToFirestore';
+import { getTimeCapsuleFromBucket } from '../db-helpers/getTimeCapsuleFromBucket';
+import { generateSVG } from '../../utilities/generateSVG';
+import { validationSchema } from '../../utilities/validationSchema';
+import { FirestoreEntry } from '../../types';
 
 config();
 

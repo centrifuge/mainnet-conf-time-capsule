@@ -9,6 +9,7 @@
   status = 200
 
 [functions]
+  directory = "functions/endpoints"
   node_bundler = "esbuild"
 
 [functions.mintTimeCapsule]
