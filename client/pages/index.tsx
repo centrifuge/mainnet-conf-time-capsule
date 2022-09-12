@@ -9,7 +9,7 @@ import { useMintTimeCapsule } from '../hooks/useMintTimeCapsule';
 
 const Home: NextPage = () => {
   const isMobile = useMediaQuery('(max-width: 599px)');
-  const { mutate, data, isLoading, isSuccess } = useMintTimeCapsule();
+  const { mutate, data, isLoading, isSuccess, isError } = useMintTimeCapsule();
   const router = useRouter();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const Home: NextPage = () => {
                 Turn your 2023 DeFi prediction into a personalized NFT
               </Title>
             </Container>
-            <MintForm mint={mutate} />
+            <MintForm mint={mutate} isError={isError} />
           </Container>
         ) : (
           <Card shadow="md" className={styles['mint-card']} py={42} px={48}>
@@ -54,7 +54,7 @@ const Home: NextPage = () => {
                 Turn your 2023 DeFi prediction into a personalized NFT
               </Title>
             </Container>
-            <MintForm mint={mutate} />
+            <MintForm mint={mutate} isError={isError} />
           </Card>
         )}
       </Container>

@@ -17,6 +17,7 @@ import styles from '../styles/Home.module.css';
 
 type Props = {
   mint: UseMutateFunction<unknown, unknown, MintPayload, unknown>;
+  isError: boolean;
 };
 
 const InputToolTip = ({ text }: { text: string }) => (
@@ -37,7 +38,7 @@ const InputToolTip = ({ text }: { text: string }) => (
   </Tooltip>
 );
 
-const MintForm = ({ mint }: Props) => {
+const MintForm = ({ mint, isError }: Props) => {
   const {
     register,
     handleSubmit,
@@ -117,6 +118,11 @@ const MintForm = ({ mint }: Props) => {
           <Button type="submit" color="dark">
             Mint NFT
           </Button>
+          {isError && (
+            <Text color="red" size="sm">
+              Something went wrong! Please try again.
+            </Text>
+          )}
         </div>
       </Stack>
     </form>
