@@ -114,13 +114,13 @@ const handler: Handler = async event => {
 
       return {
         statusCode: 500,
-        body: JSON.stringify('Something went wrong!'),
+        body: 'Something went wrong!',
       };
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify('Invalid request'),
+      body: 'Invalid request',
     };
   } catch (error) {
     if (error instanceof Error) {
@@ -132,7 +132,7 @@ const handler: Handler = async event => {
 
     return {
       statusCode: 500,
-      body: JSON.stringify('Something went wrong!'),
+      body: 'Something went wrong!',
     };
   }
 };
