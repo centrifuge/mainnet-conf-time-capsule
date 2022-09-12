@@ -14,7 +14,11 @@ const addToFirestore = async ({
   svgLink,
   timestamp,
 }: FirestoreEntry) => {
-  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
+  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID, NETWORK } =
+    process.env;
+
+  const bucketName =
+    NETWORK === 'mainnet' ? 'time-capsules' : 'time-capsules-testnet';
 
   try {
     initializeApp({
@@ -29,7 +33,7 @@ const addToFirestore = async ({
 
   const db = getFirestore();
 
-  const docRef = db.collection('predictions').doc(id);
+  const docRef = db.collection(bucketName).doc(id);
 
   await docRef.set({
     svg,

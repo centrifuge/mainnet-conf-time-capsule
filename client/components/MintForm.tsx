@@ -47,13 +47,12 @@ const MintForm = ({ mint }: Props) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (inputs: Inputs) => {
-    return mint({
+  const onSubmit: SubmitHandler<Inputs> = (inputs: Inputs) =>
+    mint({
       polygonAddress: inputs.polygonAddress,
       prediction: inputs.prediction,
       twitterHandle: inputs.twitterHandle,
     });
-  };
 
   const predictionLength = watch('prediction')?.length || 0;
 

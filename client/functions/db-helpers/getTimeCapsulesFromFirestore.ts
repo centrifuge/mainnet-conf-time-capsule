@@ -8,7 +8,11 @@ import { TimeCapsule } from '../../types';
 config();
 
 const getTimeCapsulesFromFirestore = async () => {
-  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
+  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID, NETWORK } =
+    process.env;
+
+  const bucketName =
+    NETWORK === 'mainnet' ? 'time-capsules' : 'time-capsules-testnet';
 
   try {
     initializeApp({
@@ -23,7 +27,7 @@ const getTimeCapsulesFromFirestore = async () => {
 
   const db = getFirestore();
 
-  const snapshot = await db.collection('predictions').get();
+  const snapshot = await db.collection(bucketName).get();
 
   const timeCapsules: TimeCapsule[] = [];
 
