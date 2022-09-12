@@ -8,7 +8,7 @@ const handler: Handler = async event => {
   if (httpMethod !== 'GET') {
     return {
       statusCode: 405,
-      body: 'Method not allowed. Use POST.',
+      body: 'Method not allowed. Use GET.',
     };
   }
 
