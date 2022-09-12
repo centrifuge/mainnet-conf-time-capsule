@@ -24,17 +24,23 @@ async function getQueuedTimeCapsules() {
 
   const snapshot = await db.collection('predictions').get();
 
-  const timeCapsules: { polygonAddress: string; id: string }[] = [];
+  const timeCapsules: {
+    polygonAddress: string;
+    id: string;
+    timestamp: number;
+  }[] = [];
 
   snapshot.forEach(doc => {
-    const { polygonAddress, status } = doc.data();
+    const { polygonAddress, status, timestamp } = doc.data();
 
     if (status === 'queued' || status === 'failed') {
-      timeCapsules.push({ polygonAddress, id: doc.id });
+      timeCapsules.push({ polygonAddress, id: doc.id, timestamp });
     }
   });
 
-  return timeCapsules;
+  timeCapsules.sort((a, b) => a.timestamp - b.timestamp);
+
+  return timeCapsules.slice(0, 20);
 }
 
 export default getQueuedTimeCapsules;
