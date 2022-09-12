@@ -107,7 +107,7 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   const [opened, { toggle, close }] = useDisclosure(false);
   const [active, setActive] = useState('');
 
@@ -263,6 +263,6 @@ function App({ Component, pageProps }: AppProps) {
       </MantineProvider>
     </QueryClientProvider>
   );
-}
+};
 
 export default App;

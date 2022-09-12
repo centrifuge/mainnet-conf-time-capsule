@@ -23,4 +23,4 @@ const useGetShowcase = () => {
   return query;
 };
 
-export default useGetShowcase;
+export { useGetShowcase };

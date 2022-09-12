@@ -26,4 +26,4 @@ const useGetTimeCapsules = () => {
   return query;
 };
 
-export default useGetTimeCapsules;
+export { useGetTimeCapsules };

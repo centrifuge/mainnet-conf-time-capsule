@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import getTimeCapsuleFromBucket from '../../../utilities/db/getTimeCapsuleFromBucket';
-import queryTimeCapsule from '../../../utilities/queries/queryTimeCapsule';
+import { getTimeCapsuleFromBucket } from '../../../utilities/db/getTimeCapsuleFromBucket';
+import { getTimeCapsuleFromFirestore } from '../../../utilities/db/getTimeCapsuleFromFirestore';
 
 type Response =
   | {
@@ -16,11 +16,7 @@ interface Request extends NextApiRequest {
     id: string;
   };
 }
-
-export default async function handler(
-  req: Request,
-  res: NextApiResponse<Response>,
-) {
+const handler = async (req: Request, res: NextApiResponse<Response>) => {
   const { query, method } = req;
 
   if (method !== 'GET') {
@@ -28,11 +24,11 @@ export default async function handler(
   }
 
   try {
-    const { nft } = await queryTimeCapsule(query.id);
-
     const imageLinks = await getTimeCapsuleFromBucket(query.id);
 
-    if (nft && imageLinks) {
+    const metadata = await getTimeCapsuleFromFirestore(query.id);
+
+    if (imageLinks && metadata && metadata.status === 'minted') {
       res.status(200).json({
         name: 'Centrifuge Time Capsule',
         description: 'Your prediction for DeFi in 2023',
@@ -48,4 +44,6 @@ export default async function handler(
       res.status(500).json('Something went wrong!');
     }
   }
-}
+};
+
+export default handler;

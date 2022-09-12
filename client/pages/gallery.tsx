@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { Container, Loader, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import styles from '../styles/Home.module.css';
-import useGetTimeCapsules from '../hooks/useGetTimeCapsules';
+import { useGetTimeCapsules } from '../hooks/useGetTimeCapsules';
 import { TimeCapsule } from '../types';
 
 const Gallery: NextPage = () => {

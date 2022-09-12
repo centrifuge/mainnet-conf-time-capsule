@@ -1,4 +1,4 @@
-import validationSchema from '../utilities/validationSchema';
+import { validationSchema } from '../utilities/validationSchema';
 
 export type Status = 'queued' | 'pending' | 'minted' | 'failed' | 'not found';
 

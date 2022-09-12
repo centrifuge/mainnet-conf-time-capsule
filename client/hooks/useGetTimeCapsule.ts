@@ -39,4 +39,4 @@ const useGetTimeCapsule = (config: {
   return query;
 };
 
-export default useGetTimeCapsule;
+export { useGetTimeCapsule };

@@ -3,7 +3,7 @@ import { Container, Loader, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from '../styles/Home.module.css';
-import useGetShowcase from '../hooks/useGetShowcase';
+import { useGetShowcase } from '../hooks/useGetShowcase';
 import { TimeCapsule } from '../types';
 
 const Showcase: NextPage = () => {

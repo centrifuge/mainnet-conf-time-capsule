@@ -12,4 +12,4 @@ const useMintTimeCapsule = () => {
   return query;
 };
 
-export default useMintTimeCapsule;
+export { useMintTimeCapsule };

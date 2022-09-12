@@ -1,13 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { TimeCapsule } from '../../types';
-import getTimeCapsulesFromFirestore from '../../utilities/db/getTimeCapsulesFromFirestore';
+import { getTimeCapsulesFromFirestore } from '../../utilities/db/getTimeCapsulesFromFirestore';
+import { getTimeCapsulesFromBucket } from '../../utilities/db/getTimeCapsulesFromBucket';
 
 type Response = TimeCapsule[] | string | Error;
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Response>,
-) {
+const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   const { method } = req;
 
   if (method !== 'GET') {
@@ -15,9 +13,17 @@ export default async function handler(
   }
 
   try {
+    const timeCapsulesFromBucket = await getTimeCapsulesFromBucket();
+
     const timeCapsulesFromFirestore = await getTimeCapsulesFromFirestore();
 
-    res.status(200).json(timeCapsulesFromFirestore);
+    const mintedTimeCapsules = timeCapsulesFromFirestore.filter(
+      timeCapsule =>
+        timeCapsule.status === 'minted' &&
+        timeCapsulesFromBucket[timeCapsule.id],
+    );
+
+    res.status(200).json(mintedTimeCapsules);
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json(error);
@@ -25,4 +31,6 @@ export default async function handler(
       res.status(500).json('Something went wrong!');
     }
   }
-}
+};
+
+export default handler;

@@ -1,12 +1,12 @@
-function formatTwitterHandle(TwitterHandle: string) {
+const formatTwitterHandle = (TwitterHandle: string) => {
   if (TwitterHandle) {
     return TwitterHandle[0] !== '@' ? `@${TwitterHandle}` : TwitterHandle;
   }
 
   return 'anonymous';
-}
+};
 
-export default function generateSVG(prediction: string, twitterHandle: string) {
+const generateSVG = (prediction: string, twitterHandle: string) => {
   const formattedTwitterHandle = formatTwitterHandle(twitterHandle);
 
   return `<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -488,6 +488,8 @@ export default function generateSVG(prediction: string, twitterHandle: string) {
   </clipPath>
   </defs>
   </svg>
-  
+
 `;
-}
+};
+
+export { generateSVG };

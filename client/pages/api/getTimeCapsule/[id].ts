@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Status } from '../../../types';
-import getTimeCapsuleFromBucket from '../../../utilities/db/getTimeCapsuleFromBucket';
-import getTimeCapsuleFromFirestore from '../../../utilities/db/getTimeCapsuleFromFirestore';
+import { getTimeCapsuleFromBucket } from '../../../utilities/db/getTimeCapsuleFromBucket';
+import { getTimeCapsuleFromFirestore } from '../../../utilities/db/getTimeCapsuleFromFirestore';
 
 type Response =
   | {
@@ -20,10 +20,7 @@ interface Request extends NextApiRequest {
   };
 }
 
-export default async function handler(
-  req: Request,
-  res: NextApiResponse<Response>,
-) {
+const handler = async (req: Request, res: NextApiResponse<Response>) => {
   const { query, method } = req;
 
   if (method !== 'GET') {
@@ -52,4 +49,6 @@ export default async function handler(
       res.status(500).json('Something went wrong!');
     }
   }
-}
+};
+
+export default handler;

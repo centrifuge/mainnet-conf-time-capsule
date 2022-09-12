@@ -1,6 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 
-async function getTimeCapsuleFromBucket(id: string) {
+const getTimeCapsuleFromBucket = async (id: string) => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   const storage = new Storage({
@@ -33,6 +33,6 @@ async function getTimeCapsuleFromBucket(id: string) {
   }
 
   return '';
-}
+};
 
-export default getTimeCapsuleFromBucket;
+export { getTimeCapsuleFromBucket };

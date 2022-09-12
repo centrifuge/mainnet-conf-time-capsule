@@ -7,9 +7,9 @@ import { useRouter } from 'next/router';
 import { IconBrandTwitter, IconExternalLink } from '@tabler/icons';
 import { TwitterShareButton } from 'react-share';
 import styles from '../../styles/Home.module.css';
-import useGetTimeCapsule from '../../hooks/useGetTimeCapsule';
-import getTimeCapsuleFromBucket from '../../utilities/db/getTimeCapsuleFromBucket';
-import getTimeCapsuleFromFirestore from '../../utilities/db/getTimeCapsuleFromFirestore';
+import { useGetTimeCapsule } from '../../hooks/useGetTimeCapsule';
+import { getTimeCapsuleFromBucket } from '../../utilities/db/getTimeCapsuleFromBucket';
+import { getTimeCapsuleFromFirestore } from '../../utilities/db/getTimeCapsuleFromFirestore';
 import { Status } from '../../types';
 
 const { NETWORK } = process.env;
@@ -142,7 +142,7 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
   );
 };
 
-export async function getServerSideProps(context: NextPageContext) {
+const getServerSideProps = async (context: NextPageContext) => {
   const imageLinks = await getTimeCapsuleFromBucket(context.query.id as string);
 
   const metadata = await getTimeCapsuleFromFirestore(
@@ -161,6 +161,7 @@ export async function getServerSideProps(context: NextPageContext) {
   }
 
   return { props: { status: 'not found' } };
-}
+};
 
+export { getServerSideProps };
 export default Capsule;

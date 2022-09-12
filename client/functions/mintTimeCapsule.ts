@@ -5,15 +5,15 @@ import os from 'os';
 import { Storage } from '@google-cloud/storage';
 import { config } from 'dotenv';
 import chromium from 'chrome-aws-lambda';
-import addToFirestore from '../utilities/db/addToFirestore';
-import getTimeCapsuleFromBucket from '../utilities/db/getTimeCapsuleFromBucket';
-import generateSVG from '../utilities/generateSVG';
-import validationSchema from '../utilities/validationSchema';
+import { addToFirestore } from '../utilities/db/addToFirestore';
+import { getTimeCapsuleFromBucket } from '../utilities/db/getTimeCapsuleFromBucket';
+import { generateSVG } from '../utilities/generateSVG';
+import { validationSchema } from '../utilities/validationSchema';
 import { FirestoreEntry } from '../types';
 
 config();
 
-async function addImagesToBucket(tempPath: string, uniqueId: string) {
+const addImagesToBucket = async (tempPath: string, uniqueId: string) => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   const storage = new Storage({
@@ -34,9 +34,9 @@ async function addImagesToBucket(tempPath: string, uniqueId: string) {
   await storage.bucket('nft-time-capsule.appspot.com').upload(svgFilePath, {
     destination: `${uniqueId}.svg`,
   });
-}
+};
 
-async function generatePNG(pngFilePath: string, svg: string) {
+const generatePNG = async (pngFilePath: string, svg: string) => {
   const { CHROMIUM_PATH } = process.env;
 
   const browser = await chromium.puppeteer.launch({
@@ -53,7 +53,7 @@ async function generatePNG(pngFilePath: string, svg: string) {
   await page.screenshot({ path: pngFilePath });
 
   await browser.close();
-}
+};
 
 const handler: Handler = async event => {
   const { httpMethod } = event;

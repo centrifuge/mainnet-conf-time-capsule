@@ -29,4 +29,4 @@ const validationSchema = object().shape({
   captcha: string().matches(/^$/),
 });
 
-export default validationSchema;
+export { validationSchema };

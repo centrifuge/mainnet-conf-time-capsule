@@ -5,7 +5,7 @@ import { Card, Container, Loader, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { MintForm } from '../components/MintForm';
 import styles from '../styles/Home.module.css';
-import useMintTimeCapsule from '../hooks/useMintTimeCapsule';
+import { useMintTimeCapsule } from '../hooks/useMintTimeCapsule';
 
 const Home: NextPage = () => {
   const isMobile = useMediaQuery('(max-width: 599px)');

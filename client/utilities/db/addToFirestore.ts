@@ -4,7 +4,7 @@ import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { FirestoreEntry } from '../../types';
 
-async function addToFirestore({
+const addToFirestore = async ({
   id,
   svg,
   hash,
@@ -13,7 +13,7 @@ async function addToFirestore({
   pngLink,
   svgLink,
   timestamp,
-}: FirestoreEntry) {
+}: FirestoreEntry) => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   try {
@@ -40,6 +40,6 @@ async function addToFirestore({
     pngLink,
     timestamp,
   });
-}
+};
 
-export default addToFirestore;
+export { addToFirestore };

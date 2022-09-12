@@ -4,9 +4,7 @@ import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { Status } from '../../types';
 
-async function getTimeCapsuleFromFirestore(
-  id: string,
-): Promise<{ status: Status; hash: string } | false> {
+const getTimeCapsuleFromFirestore = async (id: string) => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   try {
@@ -42,6 +40,6 @@ async function getTimeCapsuleFromFirestore(
   }
 
   return false;
-}
+};
 
-export default getTimeCapsuleFromFirestore;
+export { getTimeCapsuleFromFirestore };

@@ -12,7 +12,7 @@ import {
 } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons';
 import { Inputs, MintPayload } from '../types';
-import validationSchema from '../utilities/validationSchema';
+import { validationSchema } from '../utilities/validationSchema';
 import styles from '../styles/Home.module.css';
 
 type Props = {
@@ -37,7 +37,7 @@ const InputToolTip = ({ text }: { text: string }) => (
   </Tooltip>
 );
 
-export const MintForm = ({ mint }: Props) => {
+const MintForm = ({ mint }: Props) => {
   const {
     register,
     handleSubmit,
@@ -123,3 +123,5 @@ export const MintForm = ({ mint }: Props) => {
     </form>
   );
 };
+
+export { MintForm };
