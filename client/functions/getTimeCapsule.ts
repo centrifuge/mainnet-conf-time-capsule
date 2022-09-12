@@ -20,9 +20,7 @@ const handler: Handler = async event => {
   }
 
   try {
-    const imageLinks = await getTimeCapsuleFromBucket(
-      queryStringParameters?.id,
-    );
+    const imageLinks = await getTimeCapsuleFromBucket(queryStringParameters.id);
 
     const metadata = await getTimeCapsuleFromFirestore(
       queryStringParameters.id,

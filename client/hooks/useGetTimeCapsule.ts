@@ -16,7 +16,7 @@ const useGetTimeCapsule = (config: {
         return { status: 'not found' };
       }
 
-      const { data } = await axios.get(`/api/getTimeCapsule/${config.id}`);
+      const { data } = await axios.get(`/api/getTimeCapsule?id=${config.id}`);
 
       return data;
     },

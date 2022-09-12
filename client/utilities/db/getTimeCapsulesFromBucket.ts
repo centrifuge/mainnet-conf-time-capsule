@@ -1,4 +1,7 @@
 import { Storage } from '@google-cloud/storage';
+import { config } from 'dotenv';
+
+config();
 
 const getTimeCapsulesFromBucket = async () => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;

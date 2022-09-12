@@ -2,7 +2,10 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
+import { config } from 'dotenv';
 import { TimeCapsule } from '../../types';
+
+config();
 
 const getTimeCapsulesFromFirestore = async () => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
