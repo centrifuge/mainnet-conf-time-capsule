@@ -11,5 +11,5 @@
   directory = "functions/endpoints"
   node_bundler = "esbuild"
 
-[functions.mintTimeCapsule]
+[functions.postTimeCapsule]
   external_node_modules = ["chrome-aws-lambda"]

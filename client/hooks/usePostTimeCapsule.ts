@@ -2,9 +2,9 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { MintPayload } from '../types';
 
-const useMintTimeCapsule = () => {
+const usePostTimeCapsule = () => {
   const query = useMutation(async (payload: MintPayload) => {
-    const { data } = await axios.post('/api/mintTimeCapsule', payload);
+    const { data } = await axios.post('/api/postTimeCapsule', payload);
 
     return data;
   });
@@ -12,4 +12,4 @@ const useMintTimeCapsule = () => {
   return query;
 };
 
-export { useMintTimeCapsule };
+export { usePostTimeCapsule };

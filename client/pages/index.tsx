@@ -5,11 +5,11 @@ import { Card, Container, Loader, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { MintForm } from '../components/MintForm';
 import styles from '../styles/Home.module.css';
-import { useMintTimeCapsule } from '../hooks/useMintTimeCapsule';
+import { usePostTimeCapsule } from '../hooks/usePostTimeCapsule';
 
 const Home: NextPage = () => {
   const isMobile = useMediaQuery('(max-width: 599px)');
-  const { mutate, data, isLoading, isSuccess, isError } = useMintTimeCapsule();
+  const { mutate, data, isLoading, isSuccess, isError } = usePostTimeCapsule();
   const router = useRouter();
 
   useEffect(() => {
