@@ -2,22 +2,15 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-import { FirestoreEntry } from '../../types';
+import { config } from 'dotenv';
 
-const addToFirestore = async ({
-  id,
-  svg,
-  hash,
-  polygonAddress,
-  status,
-  pngLink,
-  svgLink,
-  timestamp,
-}: FirestoreEntry) => {
+config();
+
+const deleteTimeCapsulesFromFirestore = async (id: string) => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID, NETWORK } =
     process.env;
 
-  const bucketName =
+  const collectionName =
     NETWORK === 'mainnet' ? 'time-capsules' : 'time-capsules-testnet';
 
   try {
@@ -33,17 +26,7 @@ const addToFirestore = async ({
 
   const db = getFirestore();
 
-  const docRef = db.collection(bucketName).doc(id);
-
-  await docRef.set({
-    svg,
-    hash,
-    polygonAddress,
-    status,
-    svgLink,
-    pngLink,
-    timestamp,
-  });
+  await db.collection(collectionName).doc(id).delete();
 };
 
-export { addToFirestore };
+export { deleteTimeCapsulesFromFirestore };

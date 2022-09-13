@@ -2,13 +2,13 @@ import { Handler } from '@netlify/functions';
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
-import { addToFirestore } from '../helpers/addToFirestore';
+import { addTimeCapsuleToFirestore } from '../helpers/addTimeCapsuleToFirestore';
 import { getTimeCapsuleFromBucket } from '../helpers/getTimeCapsuleFromBucket';
 import { generateSVG } from '../helpers/generateSVG';
 import { validationSchema } from '../../utilities/validationSchema';
 import { FirestoreEntry } from '../../types';
 import { generatePNG } from '../helpers/generatePNG';
-import { addImagesToBucket } from '../helpers/addImagestoBucket';
+import { addTimeCapsulesToBucket } from '../helpers/addTimeCapsulesToBucket';
 
 const handler: Handler = async event => {
   const { httpMethod } = event;
@@ -43,7 +43,7 @@ const handler: Handler = async event => {
       const pngFilePath = path.join(tempPath, `${uniqueId}.png`);
       await generatePNG(pngFilePath, svg);
 
-      await addImagesToBucket(tempPath, uniqueId);
+      await addTimeCapsulesToBucket(tempPath, uniqueId);
 
       const imageLinks = await getTimeCapsuleFromBucket(uniqueId);
 
@@ -59,7 +59,7 @@ const handler: Handler = async event => {
           timestamp: Date.now(),
         };
 
-        await addToFirestore(timeCapsule);
+        await addTimeCapsuleToFirestore(timeCapsule);
 
         return {
           statusCode: 200,

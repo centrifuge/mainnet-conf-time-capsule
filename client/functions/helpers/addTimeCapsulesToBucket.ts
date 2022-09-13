@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 
 config();
 
-const addImagesToBucket = async (tempPath: string, uniqueId: string) => {
+const addTimeCapsulesToBucket = async (tempPath: string, uniqueId: string) => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID } = process.env;
 
   const storage = new Storage({
@@ -27,4 +27,4 @@ const addImagesToBucket = async (tempPath: string, uniqueId: string) => {
   });
 };
 
-export { addImagesToBucket };
+export { addTimeCapsulesToBucket };

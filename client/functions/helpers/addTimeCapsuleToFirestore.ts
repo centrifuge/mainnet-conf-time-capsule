@@ -2,12 +2,18 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 // eslint-disable-next-line import/no-unresolved
 import { getFirestore } from 'firebase-admin/firestore';
-import { config } from 'dotenv';
-import { Status } from '../../types';
+import { FirestoreEntry } from '../../types';
 
-config();
-
-const getTimeCapsuleFromFirestore = async (id: string) => {
+const addTimeCapsuleToFirestore = async ({
+  id,
+  svg,
+  hash,
+  polygonAddress,
+  status,
+  pngLink,
+  svgLink,
+  timestamp,
+}: FirestoreEntry) => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID, NETWORK } =
     process.env;
 
@@ -27,26 +33,17 @@ const getTimeCapsuleFromFirestore = async (id: string) => {
 
   const db = getFirestore();
 
-  const snapshot = await db.collection(collectionName).get();
+  const docRef = db.collection(collectionName).doc(id);
 
-  let timeCapsule = {};
-
-  snapshot.forEach(doc => {
-    const { hash, status } = doc.data();
-
-    if (doc.id === id) {
-      timeCapsule = {
-        hash,
-        status,
-      };
-    }
+  await docRef.set({
+    svg,
+    hash,
+    polygonAddress,
+    status,
+    svgLink,
+    pngLink,
+    timestamp,
   });
-
-  if (Object.keys(timeCapsule).length) {
-    return timeCapsule as { status: Status; hash: string };
-  }
-
-  return false;
 };
 
-export { getTimeCapsuleFromFirestore };
+export { addTimeCapsuleToFirestore };

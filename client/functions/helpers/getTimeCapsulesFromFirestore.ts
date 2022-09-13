@@ -11,7 +11,7 @@ const getTimeCapsulesFromFirestore = async () => {
   const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID, NETWORK } =
     process.env;
 
-  const bucketName =
+  const collectionName =
     NETWORK === 'mainnet' ? 'time-capsules' : 'time-capsules-testnet';
 
   try {
@@ -27,7 +27,7 @@ const getTimeCapsulesFromFirestore = async () => {
 
   const db = getFirestore();
 
-  const snapshot = await db.collection(bucketName).get();
+  const snapshot = await db.collection(collectionName).get();
 
   const timeCapsules: TimeCapsule[] = [];
 
