@@ -4,6 +4,6 @@ declare namespace NodeJS {
     GCP_PRIVATE_KEY: string;
     GCP_CLIENT_EMAIL: string;
     GCP_PROJECT_ID: string;
-    NETWORK: string;
+    NEXT_PUBLIC_NETWORK: string;
   }
 }

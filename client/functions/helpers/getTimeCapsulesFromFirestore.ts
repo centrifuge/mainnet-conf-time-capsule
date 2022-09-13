@@ -8,11 +8,17 @@ import { TimeCapsule } from '../../types';
 config();
 
 const getTimeCapsulesFromFirestore = async () => {
-  const { GCP_CLIENT_EMAIL, GCP_PRIVATE_KEY, GCP_PROJECT_ID, NETWORK } =
-    process.env;
+  const {
+    GCP_CLIENT_EMAIL,
+    GCP_PRIVATE_KEY,
+    GCP_PROJECT_ID,
+    NEXT_PUBLIC_NETWORK,
+  } = process.env;
 
   const collectionName =
-    NETWORK === 'mainnet' ? 'time-capsules' : 'time-capsules-testnet';
+    NEXT_PUBLIC_NETWORK === 'mainnet'
+      ? 'time-capsules'
+      : 'time-capsules-testnet';
 
   try {
     initializeApp({

@@ -12,7 +12,7 @@ import { getTimeCapsuleFromBucket } from '../../functions/helpers/getTimeCapsule
 import { getTimeCapsuleFromFirestore } from '../../functions/helpers/getTimeCapsuleFromFirestore';
 import { Status } from '../../types';
 
-const { NETWORK } = process.env;
+const { NEXT_PUBLIC_NETWORK } = process.env;
 
 type Props =
   | {
@@ -38,7 +38,7 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
 
   const explorerUrl = useMemo(
     () =>
-      NETWORK === 'mainnet'
+      NEXT_PUBLIC_NETWORK === 'mainnet'
         ? 'https://polygonscan.com'
         : 'https://mumbai.polygonscan.com',
     [],

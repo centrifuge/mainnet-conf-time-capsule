@@ -31,7 +31,7 @@
 
    ```sh
    CHROMIUM_PATH=<path-to-chromium-binary> # mine is /usr/local/bin/chromium
-   NETWORK=<testnet|mainnet>
+   NEXT_PUBLIC_NETWORK=<testnet|mainnet>
    ```
 
 5. Link Netlify project
