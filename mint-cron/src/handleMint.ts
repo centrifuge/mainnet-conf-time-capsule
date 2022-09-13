@@ -1,4 +1,5 @@
 import axios from 'axios';
+import https from 'https';
 import { ethers } from 'ethers';
 import { config } from 'dotenv';
 import abi from './abi.json';
@@ -20,7 +21,11 @@ async function handleMint(polygonAddress: string, uniqueId: string) {
 
   const provider = new ethers.providers.JsonRpcProvider(INFURA_RPC_URL);
 
-  const { data } = await axios(gasStationUrl);
+  const httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+  });
+
+  const { data } = await axios.get(gasStationUrl, { httpsAgent });
 
   const maxFeePerGas = ethers.utils.parseUnits(
     Math.ceil(data.fast.maxFee * 1.1).toString(),

@@ -145,6 +145,7 @@ const profaneWords = [
   'frotting',
   'fuck buttons',
   'fuck',
+  'fucking',
   'fucktards',
   'fudge packer',
   'fudgepacker',
@@ -422,7 +423,7 @@ const profaneWords = [
 
 const isProfane = (prediction: string) =>
   profaneWords.some(word => {
-    const profanityRegEx = new RegExp(`\\b${word}\\b`);
+    const profanityRegEx = new RegExp(`\\b${word}\\b`, 'i');
 
     if (profanityRegEx.test(prediction)) {
       return true;
