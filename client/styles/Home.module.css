@@ -101,8 +101,10 @@
   }
 
   .mint-button {
-    display: flex;
+    display: grid;
+    row-gap: 12px;
     justify-content: flex-end;
+    justify-items: end;
   }
 
   .time-capsule img {

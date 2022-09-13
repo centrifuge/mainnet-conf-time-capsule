@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "yarn build:next && yarn build:functions",
     "dev": "netlify dev",
+    "next:dev": "next dev",
+    "build": "yarn build:next && yarn build:functions",
     "build:next": "next build",
     "serve:functions": "netlify-lambda serve --config ./webpack.functions.js ./functions/endpoints",
     "build:functions": "netlify-lambda build --config ./webpack.functions.js ./functions/endpoints"

@@ -4,6 +4,8 @@
 
 - node
 - yarn
+- [netlify CLI](https://docs.netlify.com/cli/get-started/)
+- [chromium](https://formulae.brew.sh/cask/chromium)
 
 #### Installation
 
@@ -13,23 +15,44 @@
    $ git clone git@github.com:centrifuge/mainnet-conf-time-capsule.git
    ```
 
-2. Install packages
+2. Change directory
+
+   ```sh
+   $ cd client
+   ```
+
+3. Install packages
 
    ```sh
    $ yarn install
    ```
 
-3. Enter environment variables in `.env`
+4. Add `.env` file
 
    ```sh
-   ADMIN_PASSPHRASE=<admin-passphrase>
-   GCP_CLIENT_EMAIL=<google-cloud-service-account-email-address>
-   GCP_PRIVATE_KEY=<google-cloud-service-account-private-key>
-   GCP_PROJECT_ID=<google-cloud-project-id>
-   NETWORK=<network>
+   CHROMIUM_PATH=<path-to-chromium-binary> # mine is /usr/local/bin/chromium
+   NETWORK=<testnet|mainnet>
    ```
 
-4. Run a local development environment
+5. Link Netlify project
+
+   ```sh
+   $ netlify login
+   ```
+
+   ```sh
+   $ netlify link
+
+   --
+
+   > Search by full or partial site name
+
+   --
+
+   Enter the site name (or just part of it): time-capsule
+   ```
+
+6. Run development environment on [localhost:8888](http://localhost:8888)
 
 ```sh
 $ yarn dev
