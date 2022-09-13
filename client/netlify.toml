@@ -1,6 +1,7 @@
 [build]
   command = "yarn build"
   publish = ".next"
+  functions = "built-functions"
 
 [[redirects]]
   from = "/api/*"
@@ -8,7 +9,7 @@
   status = 200
 
 [functions]
-  directory = "functions/endpoints"
+  directory = "built-functions"
   node_bundler = "esbuild"
 
 [functions.postTimeCapsule]
