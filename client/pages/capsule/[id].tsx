@@ -4,13 +4,15 @@ import Head from 'next/head';
 import { Anchor, Container, Loader, Space, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useRouter } from 'next/router';
-import { IconBrandTwitter, IconExternalLink } from '@tabler/icons';
+import cookies from 'next-cookies';
 import { TwitterShareButton } from 'react-share';
+import { IconBrandTwitter, IconExternalLink } from '@tabler/icons';
 import styles from '../../styles/Home.module.css';
 import { useGetTimeCapsule } from '../../hooks/useGetTimeCapsule';
 import { getTimeCapsuleFromBucket } from '../../functions/helpers/getTimeCapsuleFromBucket';
 import { getTimeCapsuleFromFirestore } from '../../functions/helpers/getTimeCapsuleFromFirestore';
 import { Status } from '../../types';
+import { DeleteArea } from '../../components/DeleteArea';
 
 const { NEXT_PUBLIC_NETWORK } = process.env;
 
@@ -20,13 +22,20 @@ type Props =
       hash: string;
       status: Status;
       svgLink: string;
+      isAdmin: boolean;
     }
   | Record<string, never>;
 
-const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
+const Capsule: NextPage = ({
+  isAdmin,
+  pngLink,
+  hash,
+  status,
+  svgLink,
+}: Props) => {
   const isMobile = useMediaQuery('(max-width: 599px)');
 
-  const { query } = useRouter();
+  const { query, push } = useRouter();
 
   const { data } = useGetTimeCapsule({
     id: query.id as string,
@@ -127,6 +136,14 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
                 )}
               </div>
             </div>
+            {data.status === 'minted' && isAdmin && (
+              <div className={styles['capsule-delete-area']}>
+                <DeleteArea
+                  id={query.id as string}
+                  onSuccess={() => push('/gallery')}
+                />
+              </div>
+            )}
           </div>
         </Container>
       </>
@@ -144,6 +161,9 @@ const Capsule: NextPage = ({ pngLink, hash, status, svgLink }: Props) => {
 
 const getServerSideProps = async (context: NextPageContext) => {
   const imageLinks = await getTimeCapsuleFromBucket(context.query.id as string);
+  const { adminPassphrase } = cookies(context);
+
+  const isAdmin = adminPassphrase === process.env.ADMIN_PASSPHRASE;
 
   const metadata = await getTimeCapsuleFromFirestore(
     context.query.id as string,
@@ -156,11 +176,12 @@ const getServerSideProps = async (context: NextPageContext) => {
         hash: metadata.hash,
         svgLink: imageLinks.svgLink,
         pngLink: imageLinks.pngLink,
+        isAdmin,
       },
     };
   }
 
-  return { props: { status: 'not found' } };
+  return { props: { status: 'not found', isAdmin } };
 };
 
 export { getServerSideProps };

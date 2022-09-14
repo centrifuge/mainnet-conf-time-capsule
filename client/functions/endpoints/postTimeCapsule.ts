@@ -11,22 +11,22 @@ import { generatePNG } from '../helpers/generatePNG';
 import { addTimeCapsulesToBucket } from '../helpers/addTimeCapsulesToBucket';
 
 const handler: Handler = async event => {
-  const { httpMethod } = event;
-
-  if (httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: 'Method not allowed. Use POST.',
-    };
-  }
-
-  const uniqueId = Math.ceil(Math.random() * (2 ** 53 - 1)).toString();
-
-  const { polygonAddress, prediction, twitterHandle } = JSON.parse(
-    event.body || '',
-  );
-
   try {
+    const { httpMethod } = event;
+
+    if (httpMethod !== 'POST') {
+      return {
+        statusCode: 405,
+        body: 'Method not allowed. Use POST.',
+      };
+    }
+
+    const uniqueId = Math.ceil(Math.random() * (2 ** 53 - 1)).toString();
+
+    const { polygonAddress, prediction, twitterHandle } = JSON.parse(
+      event.body || '',
+    );
+
     const isValid = await validationSchema.isValid({
       polygonAddress,
       prediction,
@@ -81,7 +81,7 @@ const handler: Handler = async event => {
     if (error instanceof Error) {
       return {
         statusCode: 500,
-        body: JSON.stringify(error),
+        body: JSON.stringify(error?.message),
       };
     }
 

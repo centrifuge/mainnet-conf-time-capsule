@@ -155,102 +155,106 @@ const App = ({ Component, pageProps }: AppProps) => {
             },
           }}
           header={
-            <Header height={60} className={classes.root}>
-              <Container className={classes.header}>
-                <Link href="/">
-                  <button
-                    className={styles.logo}
-                    type="button"
-                    tabIndex={0}
-                    onClick={() => {
-                      setActive('home');
-                    }}
-                  >
-                    <img src="/centrifuge-logo.svg" alt="centrifuge logo" />
-                  </button>
-                </Link>
-                <Group spacing={5} className={classes.links}>
+            !pathname.includes('showcase') ? (
+              <Header height={60} className={classes.root}>
+                <Container className={classes.header}>
                   <Link href="/">
                     <button
+                      className={styles.logo}
                       type="button"
-                      className={cx(classes.link, {
-                        [classes.linkActive]: active === 'home',
-                      })}
+                      tabIndex={0}
                       onClick={() => {
                         setActive('home');
                       }}
                     >
-                      Submit New Prediction
+                      <img src="/centrifuge-logo.svg" alt="centrifuge logo" />
                     </button>
                   </Link>
-                  <Link href="/gallery">
-                    <button
-                      type="button"
-                      className={cx(classes.link, {
-                        [classes.linkActive]: active === 'gallery',
-                      })}
-                      onClick={() => {
-                        setActive('gallery');
-                      }}
-                    >
-                      Gallery
-                    </button>
-                  </Link>
-                </Group>
+                  <Group spacing={5} className={classes.links}>
+                    <Link href="/">
+                      <button
+                        type="button"
+                        className={cx(classes.link, {
+                          [classes.linkActive]: active === 'home',
+                        })}
+                        onClick={() => {
+                          setActive('home');
+                        }}
+                      >
+                        Submit New Prediction
+                      </button>
+                    </Link>
+                    <Link href="/gallery">
+                      <button
+                        type="button"
+                        className={cx(classes.link, {
+                          [classes.linkActive]: active === 'gallery',
+                        })}
+                        onClick={() => {
+                          setActive('gallery');
+                        }}
+                      >
+                        Gallery
+                      </button>
+                    </Link>
+                  </Group>
 
-                <Burger
-                  opened={opened}
-                  onClick={toggle}
-                  className={classes.burger}
-                  size="sm"
-                />
+                  <Burger
+                    opened={opened}
+                    onClick={toggle}
+                    className={classes.burger}
+                    size="sm"
+                  />
 
-                <Transition
-                  transition="pop-top-right"
-                  duration={200}
-                  mounted={opened}
-                >
-                  {style => (
-                    <Paper
-                      className={classes.dropdown}
-                      withBorder
-                      style={style}
-                    >
-                      <Link href="/">
-                        <button
-                          type="button"
-                          className={cx(classes.link, {
-                            [classes.linkActive]: active === 'home',
-                          })}
-                          onClick={() => {
-                            setActive('home');
-                            close();
-                          }}
-                          style={{ width: '100%' }}
-                        >
-                          Submit Prediction
-                        </button>
-                      </Link>
-                      <Link href="/gallery">
-                        <button
-                          type="button"
-                          className={cx(classes.link, {
-                            [classes.linkActive]: active === 'gallery',
-                          })}
-                          onClick={() => {
-                            setActive('gallery');
-                            close();
-                          }}
-                          style={{ width: '100%' }}
-                        >
-                          Gallery
-                        </button>
-                      </Link>
-                    </Paper>
-                  )}
-                </Transition>
-              </Container>
-            </Header>
+                  <Transition
+                    transition="pop-top-right"
+                    duration={200}
+                    mounted={opened}
+                  >
+                    {style => (
+                      <Paper
+                        className={classes.dropdown}
+                        withBorder
+                        style={style}
+                      >
+                        <Link href="/">
+                          <button
+                            type="button"
+                            className={cx(classes.link, {
+                              [classes.linkActive]: active === 'home',
+                            })}
+                            onClick={() => {
+                              setActive('home');
+                              close();
+                            }}
+                            style={{ width: '100%' }}
+                          >
+                            Submit Prediction
+                          </button>
+                        </Link>
+                        <Link href="/gallery">
+                          <button
+                            type="button"
+                            className={cx(classes.link, {
+                              [classes.linkActive]: active === 'gallery',
+                            })}
+                            onClick={() => {
+                              setActive('gallery');
+                              close();
+                            }}
+                            style={{ width: '100%' }}
+                          >
+                            Gallery
+                          </button>
+                        </Link>
+                      </Paper>
+                    )}
+                  </Transition>
+                </Container>
+              </Header>
+            ) : (
+              <div />
+            )
           }
         >
           <Head>

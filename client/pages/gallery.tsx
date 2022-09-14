@@ -1,14 +1,22 @@
-import type { NextPage } from 'next';
+import type { NextPage, NextPageContext } from 'next';
 import { Container, Loader, Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import cookies from 'next-cookies';
 import styles from '../styles/Home.module.css';
 import { useGetTimeCapsules } from '../hooks/useGetTimeCapsules';
+import { useGetAdminStatus } from '../hooks/useGetAdminStatus';
 import { TimeCapsule } from '../types';
+import { GalleryItem } from '../components/GalleryItem';
 
-const Gallery: NextPage = () => {
+type Props = {
+  isAdmin: boolean;
+};
+
+const Gallery: NextPage<Props> = ({ isAdmin }) => {
   const isMobile = useMediaQuery('(max-width: 599px)');
 
-  const { data, isLoading } = useGetTimeCapsules();
+  const { data, isLoading, refetch } = useGetTimeCapsules();
+  const { data: isAdminData } = useGetAdminStatus(isAdmin);
 
   if (isLoading) {
     return (
@@ -39,26 +47,29 @@ const Gallery: NextPage = () => {
         Centrifuge Time Capsule Gallery
       </Title>
       <Container px="16px" className={styles['gallery-container']}>
-        {data?.map(({ id, svgLink }: TimeCapsule) => (
-          <div key={id}>
-            <a
-              href={`/capsule/${id}`}
-              target="_black"
-              className={styles['gallery-item']}
-            >
-              <div>
-                <img
-                  src={svgLink}
-                  alt="time-capsule"
-                  width={isMobile ? 300 : 400}
-                />
-              </div>
-            </a>
-          </div>
+        {data?.map((timeCapsule: TimeCapsule) => (
+          <GalleryItem
+            key={timeCapsule.id}
+            isAdmin={isAdminData}
+            isMobile={isMobile}
+            refetch={refetch}
+            timeCapsule={timeCapsule}
+          />
         ))}
       </Container>
     </div>
   );
 };
 
+const getServerSideProps = async (context: NextPageContext) => {
+  const { adminPassphrase } = cookies(context);
+
+  const isAdmin = adminPassphrase === process.env.ADMIN_PASSPHRASE;
+
+  return {
+    props: { isAdmin },
+  };
+};
+
+export { getServerSideProps };
 export default Gallery;

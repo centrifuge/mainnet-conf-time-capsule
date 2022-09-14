@@ -198,9 +198,25 @@
 }
 
 .gallery-item div.card :hover {
-  background-color: red;
-  color: green;
   cursor: pointer;
+}
+
+.gallery-item {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  align-items: flex-end;
+}
+
+.gallery-delete-buttons {
+  display: flex;
+  column-gap: 10px;
+}
+
+.capsule-delete-area {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .share-button {

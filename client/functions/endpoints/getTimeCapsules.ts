@@ -3,16 +3,16 @@ import { getTimeCapsulesFromFirestore } from '../helpers/getTimeCapsulesFromFire
 import { getTimeCapsulesFromBucket } from '../helpers/getTimeCapsulesFromBucket';
 
 const handler: Handler = async event => {
-  const { httpMethod } = event;
-
-  if (httpMethod !== 'GET') {
-    return {
-      statusCode: 405,
-      body: 'Method not allowed. Use GET.',
-    };
-  }
-
   try {
+    const { httpMethod } = event;
+
+    if (httpMethod !== 'GET') {
+      return {
+        statusCode: 405,
+        body: 'Method not allowed. Use GET.',
+      };
+    }
+
     const timeCapsulesFromBucket = await getTimeCapsulesFromBucket();
 
     const timeCapsulesFromFirestore = await getTimeCapsulesFromFirestore();
@@ -31,7 +31,7 @@ const handler: Handler = async event => {
     if (error instanceof Error) {
       return {
         statusCode: 500,
-        body: JSON.stringify(error),
+        body: JSON.stringify(error?.message),
       };
     }
 

@@ -3,23 +3,23 @@ import { getTimeCapsuleFromBucket } from '../helpers/getTimeCapsuleFromBucket';
 import { getTimeCapsuleFromFirestore } from '../helpers/getTimeCapsuleFromFirestore';
 
 const handler: Handler = async event => {
-  const { httpMethod, queryStringParameters } = event;
-
-  if (httpMethod !== 'GET') {
-    return {
-      statusCode: 405,
-      body: 'Method not allowed. Use GET.',
-    };
-  }
-
-  if (!queryStringParameters?.id) {
-    return {
-      statusCode: 400,
-      body: 'Pass an NFT id',
-    };
-  }
-
   try {
+    const { httpMethod, queryStringParameters } = event;
+
+    if (httpMethod !== 'GET') {
+      return {
+        statusCode: 405,
+        body: 'Method not allowed. Use GET.',
+      };
+    }
+
+    if (!queryStringParameters?.id) {
+      return {
+        statusCode: 400,
+        body: 'Pass an NFT id',
+      };
+    }
+
     const imageLinks = await getTimeCapsuleFromBucket(queryStringParameters.id);
 
     const metadata = await getTimeCapsuleFromFirestore(
@@ -46,7 +46,7 @@ const handler: Handler = async event => {
     if (error instanceof Error) {
       return {
         statusCode: 500,
-        body: JSON.stringify(error),
+        body: JSON.stringify(error?.message),
       };
     }
 

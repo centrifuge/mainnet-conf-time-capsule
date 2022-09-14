@@ -1,6 +1,4 @@
 import { Handler } from '@netlify/functions';
-import { deleteTimeCapsulesFromBucket } from '../helpers/deleteTimeCapsulesFromBucket';
-import { deleteTimeCapsulesFromFirestore } from '../helpers/deleteTimeCapsulesFromFirestore';
 
 const handler: Handler = async event => {
   try {
@@ -8,15 +6,12 @@ const handler: Handler = async event => {
 
     const { httpMethod, headers } = event;
 
-    if (httpMethod !== 'DELETE') {
+    if (httpMethod !== 'GET') {
       return {
         statusCode: 405,
-        body: 'Method not allowed. Use DELETE.',
+        body: 'Method not allowed. Use GET.',
       };
     }
-
-    const { id } = JSON.parse(event.body || '');
-
     if (headers['admin-passphrase'] !== ADMIN_PASSPHRASE) {
       return {
         statusCode: 401,
@@ -24,12 +19,9 @@ const handler: Handler = async event => {
       };
     }
 
-    await deleteTimeCapsulesFromBucket(id);
-    await deleteTimeCapsulesFromFirestore(id);
-
     return {
       statusCode: 200,
-      body: JSON.stringify(`Successfully deleted ${id}`),
+      body: JSON.stringify(headers['admin-passphrase'] === ADMIN_PASSPHRASE),
     };
   } catch (error) {
     if (error instanceof Error) {
