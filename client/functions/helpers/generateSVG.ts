@@ -9,6 +9,11 @@ const formatTwitterHandle = (TwitterHandle: string) => {
 const generateSVG = (prediction: string, twitterHandle: string) => {
   const formattedTwitterHandle = formatTwitterHandle(twitterHandle);
 
+  const sanitizedPrediction = prediction
+    .replaceAll(/&/g, '&amp;')
+    .replaceAll(/</g, '&lt;')
+    .replaceAll(/>/g, '&gt;');
+
   return `<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
         <style>
@@ -21,7 +26,7 @@ const generateSVG = (prediction: string, twitterHandle: string) => {
   <g clip-path="url(#clip0_583_596)">
   <rect width="1600" height="900" fill="black"/>
   <text fill="white" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="55" font-weight="bold" letter-spacing="0em"><tspan x="76" y="118.318">My 2023 DeFi Prediction</tspan></text>
-  <foreignObject x="65" y="203.318" height="100%" width="1090"><div disabled="true" xmlns="http://www.w3.org/1999/xhtml" rows="4" style="width: 1090px; border: none; background: transparent; resize: none; color: white; text-align: left; font-size: 70px; font-weight: 500; font-family: Inter; overflow: hidden; white-space: pre-wrap;">"${prediction}"<span style="font-size: 55px;">&#13;&#10;<span style="line-height: 400%;">&#x2013; ${formattedTwitterHandle}</span></span></div></foreignObject>
+  <foreignObject x="65" y="203.318" height="100%" width="1090"><div disabled="true" xmlns="http://www.w3.org/1999/xhtml" rows="4" style="width: 1090px; border: none; background: transparent; resize: none; color: white; text-align: left; font-size: 70px; font-weight: 500; font-family: Inter; overflow: hidden; white-space: pre-wrap;">"${sanitizedPrediction}"<span style="font-size: 55px;">&#13;&#10;<span style="line-height: 400%;">&#x2013; ${formattedTwitterHandle}</span></span></div></foreignObject>
   <mask id="mask0_583_596" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="1298" y="58" width="76" height="62">
   <path fill-rule="evenodd" clip-rule="evenodd" d="M1298.88 58.959H1373.29V119.32H1298.88V58.959Z" fill="white"/>
   </mask>
