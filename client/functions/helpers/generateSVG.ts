@@ -10,9 +10,9 @@ const generateSVG = (prediction: string, twitterHandle: string) => {
   const formattedTwitterHandle = formatTwitterHandle(twitterHandle);
 
   const sanitizedPrediction = prediction
-    .replaceAll(/&/g, '&amp;')
-    .replaceAll(/</g, '&lt;')
-    .replaceAll(/>/g, '&gt;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 
   return `<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
